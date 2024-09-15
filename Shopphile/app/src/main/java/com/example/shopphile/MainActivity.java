@@ -4,9 +4,11 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -14,9 +16,12 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
     ImageView notificationBell, shoppingCart;
+    Spinner deliverToOptionSpinner;
+
+    String [] deliverToOptions = {"Home", "School", "Office"};
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -25,15 +30,12 @@ public class MainActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
 
-        //get the spinner from the xml.
-        Spinner dropdown = findViewById(R.id.spinner1);
-        //create a list of items for the spinner.
-        String[] items = new String[]{"Home", "School", "Office"};
-        //create an adapter to describe how the items are displayed, adapters are used in several places in android.
-        //There are multiple variations of this, but this is the basic variant.
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, items);
-        //set the spinners adapter to the previously created one.
-        dropdown.setAdapter(adapter);
+        deliverToOptionSpinner = findViewById(R.id.delivertooptions);
+
+        ArrayAdapter arrayDeliverToOptions = new ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, deliverToOptions);
+        arrayDeliverToOptions.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        deliverToOptionSpinner.setAdapter(arrayDeliverToOptions);
+        deliverToOptionSpinner.setOnItemSelectedListener(this);
 
         shoppingCart = findViewById(R.id.shoppingcart);
 
@@ -50,5 +52,15 @@ public class MainActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
+        Toast.makeText(getApplicationContext(), deliverToOptions[position], Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> adapterView) {
+
     }
 }
