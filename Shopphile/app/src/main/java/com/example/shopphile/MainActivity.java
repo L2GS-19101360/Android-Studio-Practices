@@ -15,13 +15,21 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
     ImageView notificationBell, shoppingCart;
     Spinner deliverToOptionSpinner;
 
+    RecyclerView productDisplayRecycleView;
+
     String [] deliverToOptions = {"Home", "School", "Office"};
+
+    ArrayList<ProductData> productDataArrayList = new ArrayList<>();
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -30,15 +38,32 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
 
-        deliverToOptionSpinner = findViewById(R.id.delivertooptions);
+        // Initialize your product data
+        productDataArrayList.add(new ProductData(R.drawable.tshirt_image, "T-Shirts", 100F));
+        productDataArrayList.add(new ProductData(R.drawable.jeans_image, "Jeans", 200F));
+        productDataArrayList.add(new ProductData(R.drawable.hat_image, "Hats", 50F));
+        productDataArrayList.add(new ProductData(R.drawable.jacket_image, "Jackets", 300F));
+        productDataArrayList.add(new ProductData(R.drawable.suit_image, "Suits", 500F));
 
-        ArrayAdapter arrayDeliverToOptions = new ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, deliverToOptions);
+        productDisplayRecycleView = findViewById(R.id.productdisplayrecyclerviewer);
+
+        // Set the layout manager
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+        productDisplayRecycleView.setLayoutManager(layoutManager);
+
+        // Initialize and set the adapter
+        ProductDisplayViewAdapter adapter = new ProductDisplayViewAdapter(productDataArrayList);
+        productDisplayRecycleView.setAdapter(adapter); // Set the adapter here
+
+        // Spinner setup
+        deliverToOptionSpinner = findViewById(R.id.delivertooptions);
+        ArrayAdapter<String> arrayDeliverToOptions = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, deliverToOptions);
         arrayDeliverToOptions.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         deliverToOptionSpinner.setAdapter(arrayDeliverToOptions);
         deliverToOptionSpinner.setOnItemSelectedListener(this);
 
+        // Shopping cart click listener
         shoppingCart = findViewById(R.id.shoppingcart);
-
         shoppingCart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -47,6 +72,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             }
         });
 
+        // Apply window insets
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);

@@ -9,14 +9,14 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.ArrayList;
+
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder> {
 
-    private String[] pokemonNames;
-    private int[] pokemonImages;
+    private ArrayList<Pokemon> pokemons;
 
-    public RecyclerViewAdapter(String[] pokemonNames, int[] pokemonImages) {
-        this.pokemonNames = pokemonNames;
-        this.pokemonImages = pokemonImages;
+    public RecyclerViewAdapter(ArrayList<Pokemon> pokemons) {
+        this.pokemons = pokemons;
     }
 
     @NonNull
@@ -28,13 +28,14 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        holder.pokemonImageView.setImageResource(pokemonImages[position]);
-        holder.pokemonTextView.setText(pokemonNames[position]);
+        Pokemon pokemon = pokemons.get(position);
+        holder.pokemonImageView.setImageResource(pokemon.getImageResource());
+        holder.pokemonTextView.setText(pokemon.getName());
     }
 
     @Override
     public int getItemCount() {
-        return pokemonNames.length;
+        return pokemons.size();
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
