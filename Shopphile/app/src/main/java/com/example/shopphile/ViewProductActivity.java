@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -15,9 +16,12 @@ import androidx.core.view.WindowInsetsCompat;
 
 public class ViewProductActivity extends AppCompatActivity {
 
-    ImageView backToMainActivity, productImageDisplay;
+    ImageView backToMainActivity, productImageDisplay, addProductQuantityButton, minusProductQuantityButton;
 
-    TextView productNameDisplay, productPriceDisplay;
+    TextView productNameDisplay, productPriceDisplay, productQuantityDisplay;
+
+    int productQuantityCount = 0;
+    float newTotalPrice = 0;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -44,6 +48,41 @@ public class ViewProductActivity extends AppCompatActivity {
         }
         productNameDisplay.setText(getProductName);
         productPriceDisplay.setText(String.format("$%.2f", getProductPrice));
+
+        addProductQuantityButton = findViewById(R.id.addproductquantitybutton);
+        minusProductQuantityButton = findViewById(R.id.minusproductquantitybutton);
+
+        productQuantityDisplay = findViewById(R.id.productquantitydisplay);
+
+        addProductQuantityButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                productQuantityCount += 1;
+                productQuantityDisplay.setText(String.valueOf(productQuantityCount));
+                productQuantityDisplay.setTextSize(20);
+
+                newTotalPrice += getProductPrice;
+                productPriceDisplay.setText(String.format("$%.2f", newTotalPrice));
+                productPriceDisplay.setTextSize(20);
+            }
+        });
+
+        minusProductQuantityButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (productQuantityCount > 1) {
+                    productQuantityCount -= 1;
+                    productQuantityDisplay.setText(String.valueOf(productQuantityCount));
+                    productQuantityDisplay.setTextSize(20);
+
+                    newTotalPrice -= getProductPrice;
+                    productPriceDisplay.setText(String.format("$%.2f", newTotalPrice));
+                    productPriceDisplay.setTextSize(20);
+                } else {
+                    Toast.makeText(ViewProductActivity.this, "Quantity Cannot Decrease More", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
 
         backToMainActivity.setOnClickListener(new View.OnClickListener() {
             @Override
