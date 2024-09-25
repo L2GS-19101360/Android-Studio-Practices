@@ -59,6 +59,9 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 // Show the product details in a Toast
                 //Toast.makeText(MainActivity.this, "Product: " + product.getProductName() + ", Price: $" + product.getProductPrice(), Toast.LENGTH_SHORT).show();
                 Intent mainActivityIntent = new Intent(MainActivity.this, ViewProductActivity.class);
+                mainActivityIntent.putExtra("product_image_data", product.getProductImage());
+                mainActivityIntent.putExtra("product_name_data", product.getProductName());
+                mainActivityIntent.putExtra("product_price_data", product.getProductPrice());
                 startActivity(mainActivityIntent);
             }
         });

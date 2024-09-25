@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">Shopphile</string>
     <string name="select_item">Select Item</string>
+    <string name="product_description">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque ultricies enim vel pretium feugiat. Sed justo nisi, scelerisque ut leo id, porta porttitor massa. Cras tincidunt lorem et justo consectetur convallis. Maecenas sollicitudin sem vel tristique pretium.</string>
 </resources>
