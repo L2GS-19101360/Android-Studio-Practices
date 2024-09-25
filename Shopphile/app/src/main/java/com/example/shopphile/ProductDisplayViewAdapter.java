@@ -58,10 +58,10 @@ public class ProductDisplayViewAdapter extends RecyclerView.Adapter<ProductDispl
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            productImageDisplay = itemView.findViewById(R.id.productimagedisplay);
-            productNameDisplay = itemView.findViewById(R.id.productnamedisplay);
-            productPriceDisplay = itemView.findViewById(R.id.productpricedisplay);
-            viewProductButton = itemView.findViewById(R.id.viewproductbutton); // Initialize the button
+            productImageDisplay = itemView.findViewById(R.id.productimagechoicedisplay);
+            productNameDisplay = itemView.findViewById(R.id.productnamechoicedisplay);
+            productPriceDisplay = itemView.findViewById(R.id.productpricechoicedisplay);
+            viewProductButton = itemView.findViewById(R.id.viewproductchoicebutton); // Initialize the button
         }
     }
 

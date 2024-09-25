@@ -57,7 +57,9 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             @Override
             public void onProductButtonClick(ProductData product) {
                 // Show the product details in a Toast
-                Toast.makeText(MainActivity.this, "Product: " + product.getProductName() + ", Price: $" + product.getProductPrice(), Toast.LENGTH_SHORT).show();
+                //Toast.makeText(MainActivity.this, "Product: " + product.getProductName() + ", Price: $" + product.getProductPrice(), Toast.LENGTH_SHORT).show();
+                Intent mainActivityIntent = new Intent(MainActivity.this, ViewProductActivity.class);
+                startActivity(mainActivityIntent);
             }
         });
         productDisplayRecycleView.setAdapter(adapter);

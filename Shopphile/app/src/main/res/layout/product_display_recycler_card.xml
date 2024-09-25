@@ -12,7 +12,7 @@
         android:layout_height="match_parent">
 
         <ImageView
-            android:id="@+id/productimagedisplay"
+            android:id="@+id/productimagechoicedisplay"
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:layout_marginTop="10dp"
@@ -23,36 +23,36 @@
             app:layout_constraintWidth_percent="0.4" />
 
         <TextView
-            android:id="@+id/productnamedisplay"
+            android:id="@+id/productnamechoicedisplay"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Product Name"
             android:textSize="18sp"
             android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="@+id/productimagedisplay"
-            app:layout_constraintStart_toStartOf="@+id/productimagedisplay"
-            app:layout_constraintTop_toBottomOf="@+id/productimagedisplay" />
+            app:layout_constraintEnd_toEndOf="@+id/productimagechoicedisplay"
+            app:layout_constraintStart_toStartOf="@+id/productimagechoicedisplay"
+            app:layout_constraintTop_toBottomOf="@+id/productimagechoicedisplay" />
 
         <TextView
-            android:id="@+id/productpricedisplay"
+            android:id="@+id/productpricechoicedisplay"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Product Price"
             android:textSize="16sp"
-            app:layout_constraintEnd_toEndOf="@+id/productnamedisplay"
-            app:layout_constraintStart_toStartOf="@+id/productnamedisplay"
-            app:layout_constraintTop_toBottomOf="@+id/productnamedisplay" />
+            app:layout_constraintEnd_toEndOf="@+id/productnamechoicedisplay"
+            app:layout_constraintStart_toStartOf="@+id/productnamechoicedisplay"
+            app:layout_constraintTop_toBottomOf="@+id/productnamechoicedisplay" />
 
         <Button
-            android:id="@+id/viewproductbutton"
+            android:id="@+id/viewproductchoicebutton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:backgroundTint="@color/mustard_yellow"
             android:text="View Product"
-            app:layout_constraintEnd_toEndOf="@+id/productpricedisplay"
-            app:layout_constraintStart_toStartOf="@+id/productpricedisplay"
-            app:layout_constraintTop_toBottomOf="@+id/productpricedisplay" />
+            app:layout_constraintEnd_toEndOf="@+id/productpricechoicedisplay"
+            app:layout_constraintStart_toStartOf="@+id/productpricechoicedisplay"
+            app:layout_constraintTop_toBottomOf="@+id/productpricechoicedisplay" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

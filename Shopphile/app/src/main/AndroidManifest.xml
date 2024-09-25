@@ -13,6 +13,9 @@
         android:theme="@style/Theme.Shopphile"
         tools:targetApi="31">
         <activity
+            android:name=".ViewProductActivity"
+            android:exported="false" />
+        <activity
             android:name=".OrderActivity"
             android:exported="false" />
         <activity
@@ -20,8 +23,8 @@
             android:exported="false" />
         <activity
             android:name=".MainActivity"
-            android:windowSoftInputMode="stateHidden|adjustPan"
-            android:exported="true">
+            android:exported="true"
+            android:windowSoftInputMode="stateHidden|adjustPan">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
