@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -51,9 +52,15 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         productDisplayRecycleView.setLayoutManager(layoutManager);
 
-        // Initialize and set the adapter
-        ProductDisplayViewAdapter adapter = new ProductDisplayViewAdapter(productDataArrayList);
-        productDisplayRecycleView.setAdapter(adapter); // Set the adapter here
+        // Initialize and set the adapter with the button click listener
+        ProductDisplayViewAdapter adapter = new ProductDisplayViewAdapter(productDataArrayList, new ProductDisplayViewAdapter.OnProductButtonClickListener() {
+            @Override
+            public void onProductButtonClick(ProductData product) {
+                // Show the product details in a Toast
+                Toast.makeText(MainActivity.this, "Product: " + product.getProductName() + ", Price: $" + product.getProductPrice(), Toast.LENGTH_SHORT).show();
+            }
+        });
+        productDisplayRecycleView.setAdapter(adapter);
 
         // Spinner setup
         deliverToOptionSpinner = findViewById(R.id.delivertooptions);

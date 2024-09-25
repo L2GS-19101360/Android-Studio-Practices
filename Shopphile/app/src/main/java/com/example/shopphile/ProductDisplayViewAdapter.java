@@ -4,6 +4,7 @@ import android.media.Image;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -15,9 +16,12 @@ import java.util.ArrayList;
 public class ProductDisplayViewAdapter extends RecyclerView.Adapter<ProductDisplayViewAdapter.ViewHolder> {
 
     ArrayList<ProductData> productDataArrayList;
+    private OnProductButtonClickListener onProductButtonClickListener;
 
-    public ProductDisplayViewAdapter(ArrayList<ProductData> productDataArrayList) {
+    // Constructor accepting a button click listener
+    public ProductDisplayViewAdapter(ArrayList<ProductData> productDataArrayList, OnProductButtonClickListener listener) {
         this.productDataArrayList = productDataArrayList;
+        this.onProductButtonClickListener = listener;
     }
 
     @NonNull
@@ -33,6 +37,13 @@ public class ProductDisplayViewAdapter extends RecyclerView.Adapter<ProductDispl
         holder.productImageDisplay.setImageResource(productData.getProductImage());
         holder.productNameDisplay.setText(productData.getProductName());
         holder.productPriceDisplay.setText(String.format("$%.2f", productData.getProductPrice()));
+
+        // Set the click listener for the viewProductButton
+        holder.viewProductButton.setOnClickListener(v -> {
+            if (onProductButtonClickListener != null) {
+                onProductButtonClickListener.onProductButtonClick(productData);
+            }
+        });
     }
 
     @Override
@@ -43,12 +54,21 @@ public class ProductDisplayViewAdapter extends RecyclerView.Adapter<ProductDispl
     public static class ViewHolder extends RecyclerView.ViewHolder {
         ImageView productImageDisplay;
         TextView productNameDisplay, productPriceDisplay;
+        Button viewProductButton; // Add the button here
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             productImageDisplay = itemView.findViewById(R.id.productimagedisplay);
             productNameDisplay = itemView.findViewById(R.id.productnamedisplay);
             productPriceDisplay = itemView.findViewById(R.id.productpricedisplay);
+            viewProductButton = itemView.findViewById(R.id.viewproductbutton); // Initialize the button
         }
     }
+
+    // Define an interface for button clicks
+    public interface OnProductButtonClickListener {
+        void onProductButtonClick(ProductData product);
+    }
 }
+
+
