@@ -53,7 +53,7 @@
 
 
     <Button
-        android:id="@+id/addproducttocard"
+        android:id="@+id/addproducttocart"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="32dp"

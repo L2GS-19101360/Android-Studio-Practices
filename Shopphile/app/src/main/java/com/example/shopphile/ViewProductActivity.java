@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -19,6 +20,8 @@ public class ViewProductActivity extends AppCompatActivity {
     ImageView backToMainActivity, productImageDisplay, addProductQuantityButton, minusProductQuantityButton;
 
     TextView productNameDisplay, productPriceDisplay, productQuantityDisplay;
+
+    Button addProductToCart;
 
     int productQuantityCount = 0;
     float newTotalPrice = 0;
@@ -81,6 +84,15 @@ public class ViewProductActivity extends AppCompatActivity {
                 } else {
                     Toast.makeText(ViewProductActivity.this, "Quantity Cannot Decrease More", Toast.LENGTH_SHORT).show();
                 }
+            }
+        });
+
+        addProductToCart = findViewById(R.id.addproducttocart);
+
+        addProductToCart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                
             }
         });
 
