@@ -84,7 +84,15 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             }
         });
 
-        // Apply window insets
+        notificationBell = findViewById(R.id.notificationbell);
+        notificationBell.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent toShoppingCart = new Intent(MainActivity.this, OrderActivity.class);
+                startActivity(toShoppingCart);
+            }
+        });
+
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
