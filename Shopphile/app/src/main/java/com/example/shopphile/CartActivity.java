@@ -51,6 +51,8 @@ public class CartActivity extends AppCompatActivity {
         cartAdapter = new CartAdapter(this, cartDataArrayList);
         cartRecyclerView.setAdapter(cartAdapter);
 
+
+
         backToHomePage = findViewById(R.id.backtohomepagebutton);
 
         backToHomePage.setOnClickListener(new View.OnClickListener() {
