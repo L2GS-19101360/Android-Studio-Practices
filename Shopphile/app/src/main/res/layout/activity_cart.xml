@@ -7,17 +7,29 @@
     android:layout_height="match_parent"
     tools:context=".CartActivity">
 
+    <ImageView
+        android:id="@+id/backtohomepagebutton"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="32dp"
+        app:layout_constraintBottom_toBottomOf="@+id/textView21"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/arrow_back_24px" />
+
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/textView21"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="167dp"
-        android:layout_marginTop="356dp"
-        android:layout_marginEnd="168dp"
-        android:layout_marginBottom="356dp"
-        android:text="Cart Activity"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginBottom="673dp"
+        android:text="Cart"
+        android:textSize="30dp"
+        app:layout_constraintStart_toEndOf="@+id/backtohomepagebutton"
         app:layout_constraintTop_toTopOf="parent" />
+
+    
+
 </androidx.constraintlayout.widget.ConstraintLayout>
