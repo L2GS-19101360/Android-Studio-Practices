@@ -1,17 +1,16 @@
 package com.example.shopphile;
 
 public class CartData {
-
     private int productCartImage;
     private String productCartName;
-    private float productCartTotalPrice; // Keep this for total price
+    private float productCartPrice;
     private int productCartQuantity;
 
-    public CartData(int productCartImage, String productCartName, float productPrice, int productCartQuantity) {
+    public CartData(int productCartImage, String productCartName, float productCartPrice, int productCartQuantity) {
         this.productCartImage = productCartImage;
         this.productCartName = productCartName;
+        this.productCartPrice = productCartPrice;
         this.productCartQuantity = productCartQuantity;
-        this.productCartTotalPrice = productPrice * productCartQuantity; // Calculate total price
     }
 
     public int getProductCartImage() {
@@ -22,12 +21,15 @@ public class CartData {
         return productCartName;
     }
 
-    public float getProductCartTotalPrice() {
-        return productCartTotalPrice; // Return the calculated total price
+    public float getProductCartPrice() {
+        return productCartPrice;
     }
 
     public int getProductCartQuantity() {
         return productCartQuantity;
     }
 
+    public float getProductCartTotalPrice() {
+        return productCartPrice * productCartQuantity;
+    }
 }
