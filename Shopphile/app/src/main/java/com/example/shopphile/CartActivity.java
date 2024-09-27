@@ -2,12 +2,17 @@ package com.example.shopphile;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -58,7 +63,7 @@ public class CartActivity extends AppCompatActivity {
         cartAdapter = new CartAdapter(this, cartDataArrayList);
         cartRecyclerView.setAdapter(cartAdapter);
 
-        // Implement swipe-to-delete
+        // Implement swipe-to-delete with red background indicator
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.RIGHT) {
             @Override
             public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
@@ -76,6 +81,52 @@ public class CartActivity extends AppCompatActivity {
 
                 // Optionally, update the total price display after deletion
                 updateTotalPrice();
+            }
+
+            // Override onChildDraw to show a red background while swiping
+            @Override
+            public void onChildDraw(Canvas c, RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
+                if (actionState == ItemTouchHelper.ACTION_STATE_SWIPE) {
+                    // Draw the red background
+                    Paint paint = new Paint();
+                    paint.setColor(Color.RED);
+                    c.drawRect(
+                            (float) viewHolder.itemView.getLeft(),
+                            (float) viewHolder.itemView.getTop(),
+                            dX,
+                            (float) viewHolder.itemView.getBottom(),
+                            paint
+                    );
+
+                    // Draw the "DELETE" text
+                    Paint textPaint = new Paint();
+                    textPaint.setColor(Color.WHITE);
+                    textPaint.setTextSize(50); // Adjust text size as needed
+                    textPaint.setTextAlign(Paint.Align.LEFT);
+
+                    // Calculate the position of the "DELETE" text
+                    float textX = viewHolder.itemView.getLeft() + 150; // Padding to the right of the icon
+                    float textY = viewHolder.itemView.getTop() + (viewHolder.itemView.getHeight() / 2) + 20; // Center vertically
+
+                    // Draw the text on the canvas
+                    c.drawText("DELETE", textX, textY, textPaint);
+
+                    // Draw the delete icon beside the text
+                    Drawable deleteIcon = ContextCompat.getDrawable(recyclerView.getContext(), R.drawable.delete_24px); // Load the icon
+                    if (deleteIcon != null) {
+                        int iconMargin = (viewHolder.itemView.getHeight() - deleteIcon.getIntrinsicHeight()) / 2; // Vertically center the icon
+                        int iconTop = viewHolder.itemView.getTop() + iconMargin;
+                        int iconBottom = iconTop + deleteIcon.getIntrinsicHeight();
+                        int iconLeft = viewHolder.itemView.getLeft() + 50; // Padding from left side for the icon
+                        int iconRight = iconLeft + deleteIcon.getIntrinsicWidth();
+
+                        deleteIcon.setBounds(iconLeft, iconTop, iconRight, iconBottom);
+                        deleteIcon.draw(c);
+                    }
+
+                    // Draw the item view itself
+                    super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
+                }
             }
         });
 
