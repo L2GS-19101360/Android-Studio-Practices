@@ -25,9 +25,9 @@ public class CartActivity extends AppCompatActivity {
     RecyclerView cartRecyclerView;
     CartAdapter cartAdapter;
 
-    TextView totalPriceDisplay, shipmentPaymentDisplay, overallTotal;
+    TextView totalPriceDisplay, shipmentPaymentDisplay, overallTotalDisplay;
 
-
+    float shipmentValue = 10.00F;
 
     ArrayList<CartData> cartDataArrayList = new ArrayList<>();
 
@@ -40,11 +40,15 @@ public class CartActivity extends AppCompatActivity {
         SharedPreferences sharedPreferences = getSharedPreferences("CartData", MODE_PRIVATE);
         Map<String, ?> allEntries = sharedPreferences.getAll();
 
+        float totalPrice = 0.0f; // Initialize total price
         for (Map.Entry<String, ?> entry : allEntries.entrySet()) {
             String[] productData = entry.getValue().toString().split(",");
             int productImage = Integer.parseInt(productData[0]);
             float productPrice = Float.parseFloat(productData[1]);
             int productQuantity = Integer.parseInt(productData[2]);
+
+            // Calculate total price for this product
+            totalPrice += productPrice * productQuantity;
 
             CartData cartData = new CartData(productImage, entry.getKey().replace("_data", ""), productPrice, productQuantity);
             cartDataArrayList.add(cartData);
@@ -56,7 +60,17 @@ public class CartActivity extends AppCompatActivity {
         cartAdapter = new CartAdapter(this, cartDataArrayList);
         cartRecyclerView.setAdapter(cartAdapter);
 
+        // Update total price display
+        totalPriceDisplay = findViewById(R.id.totalpricedisplay);
+        shipmentPaymentDisplay = findViewById(R.id.shipmentpaymentdisplay);
+        overallTotalDisplay = findViewById(R.id.overalltotaldisplay);
 
+        shipmentPaymentDisplay.setText(String.format("$%.2f", shipmentValue));
+        totalPriceDisplay.setText(String.format("$%.2f", totalPrice));
+
+        // Calculate and display overall total (Total + Shipment)
+        float overallTotal = totalPrice + shipmentValue;
+        overallTotalDisplay.setText(String.format("$%.2f", overallTotal));
 
         backToHomePage = findViewById(R.id.backtohomepagebutton);
 
@@ -74,4 +88,6 @@ public class CartActivity extends AppCompatActivity {
             return insets;
         });
     }
+
+
 }
