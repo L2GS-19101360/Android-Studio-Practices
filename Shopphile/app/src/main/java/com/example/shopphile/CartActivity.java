@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -23,6 +24,10 @@ public class CartActivity extends AppCompatActivity {
     ImageView backToHomePage;
     RecyclerView cartRecyclerView;
     CartAdapter cartAdapter;
+
+    TextView totalPriceDisplay, shipmentPaymentDisplay, overallTotal;
+
+
 
     ArrayList<CartData> cartDataArrayList = new ArrayList<>();
 
