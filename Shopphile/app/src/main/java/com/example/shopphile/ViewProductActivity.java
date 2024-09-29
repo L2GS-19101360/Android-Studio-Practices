@@ -24,8 +24,8 @@ public class ViewProductActivity extends AppCompatActivity {
 
     Button addProductToCart;
 
-    int productQuantityCount = 0;
-    float newTotalPrice = 0;
+    int productQuantityCount = 1;
+    float newTotalPrice;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -57,6 +57,8 @@ public class ViewProductActivity extends AppCompatActivity {
         minusProductQuantityButton = findViewById(R.id.minusproductquantitybutton);
 
         productQuantityDisplay = findViewById(R.id.productquantitydisplay);
+
+        newTotalPrice = getProductPrice;
 
         addProductQuantityButton.setOnClickListener(new View.OnClickListener() {
             @Override
