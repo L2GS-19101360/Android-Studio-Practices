@@ -63,8 +63,8 @@ public class CartActivity extends AppCompatActivity {
         cartAdapter = new CartAdapter(this, cartDataArrayList);
         cartRecyclerView.setAdapter(cartAdapter);
 
-        // Implement swipe-to-delete with red background indicator
-        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.RIGHT) {
+        // Implement swipe-to-delete (right) and swipe-to-change-order (left)
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.RIGHT | ItemTouchHelper.LEFT) {
             @Override
             public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
                 return false;  // We are not implementing drag & drop
@@ -72,56 +72,91 @@ public class CartActivity extends AppCompatActivity {
 
             @Override
             public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
-                // Get the position of the swiped item
                 int position = viewHolder.getAdapterPosition();
 
-                // Remove item from the list and notify the adapter
-                cartDataArrayList.remove(position);
-                cartAdapter.notifyItemRemoved(position);
-
-                // Optionally, update the total price display after deletion
-                updateTotalPrice();
+                if (direction == ItemTouchHelper.RIGHT) {
+                    // Handle the DELETE action
+                    cartDataArrayList.remove(position);
+                    cartAdapter.notifyItemRemoved(position);
+                    updateTotalPrice();
+                } else if (direction == ItemTouchHelper.LEFT) {
+                    // Handle the CHANGE ORDER action
+                    // For example, you can show a dialog or activity to update the order
+                    // Here, I am just notifying the adapter to rebind the item
+                    cartAdapter.notifyItemChanged(position);
+                    // Optionally, show a toast or dialog for the change order action
+                }
             }
 
-            // Override onChildDraw to show a red background while swiping
             @Override
             public void onChildDraw(Canvas c, RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
                 if (actionState == ItemTouchHelper.ACTION_STATE_SWIPE) {
-                    // Draw the red background
                     Paint paint = new Paint();
-                    paint.setColor(Color.RED);
-                    c.drawRect(
-                            (float) viewHolder.itemView.getLeft(),
-                            (float) viewHolder.itemView.getTop(),
-                            dX,
-                            (float) viewHolder.itemView.getBottom(),
-                            paint
-                    );
+                    Drawable icon = null;
+                    String actionText = "";
+                    int iconLeft = 0, iconRight, iconTop, iconBottom;
+                    float textX;
 
-                    // Draw the "DELETE" text
-                    Paint textPaint = new Paint();
-                    textPaint.setColor(Color.WHITE);
-                    textPaint.setTextSize(50); // Adjust text size as needed
-                    textPaint.setTextAlign(Paint.Align.LEFT);
+                    if (dX > 0) { // Swiping to the right (DELETE)
+                        // Red background for DELETE
+                        paint.setColor(Color.RED);
+                        c.drawRect(
+                                (float) viewHolder.itemView.getLeft(),
+                                (float) viewHolder.itemView.getTop(),
+                                dX,
+                                (float) viewHolder.itemView.getBottom(),
+                                paint
+                        );
 
-                    // Calculate the position of the "DELETE" text
-                    float textX = viewHolder.itemView.getLeft() + 150; // Padding to the right of the icon
-                    float textY = viewHolder.itemView.getTop() + (viewHolder.itemView.getHeight() / 2) + 20; // Center vertically
+                        // Draw DELETE text
+                        actionText = "DELETE";
+                        paint.setColor(Color.WHITE);
+                        paint.setTextSize(50);
+                        paint.setTextAlign(Paint.Align.LEFT);
+                        textX = viewHolder.itemView.getLeft() + 150;
 
-                    // Draw the text on the canvas
-                    c.drawText("DELETE", textX, textY, textPaint);
+                        c.drawText(actionText, textX, viewHolder.itemView.getTop() + (viewHolder.itemView.getHeight() / 2) + 20, paint);
 
-                    // Draw the delete icon beside the text
-                    Drawable deleteIcon = ContextCompat.getDrawable(recyclerView.getContext(), R.drawable.delete_24px); // Load the icon
-                    if (deleteIcon != null) {
-                        int iconMargin = (viewHolder.itemView.getHeight() - deleteIcon.getIntrinsicHeight()) / 2; // Vertically center the icon
-                        int iconTop = viewHolder.itemView.getTop() + iconMargin;
-                        int iconBottom = iconTop + deleteIcon.getIntrinsicHeight();
-                        int iconLeft = viewHolder.itemView.getLeft() + 50; // Padding from left side for the icon
-                        int iconRight = iconLeft + deleteIcon.getIntrinsicWidth();
+                        // Draw delete icon
+                        icon = ContextCompat.getDrawable(recyclerView.getContext(), R.drawable.delete_24px);
+                        if (icon != null) {
+                            iconLeft = viewHolder.itemView.getLeft() + 50;
+                        }
+                    } else { // Swiping to the left (CHANGE ORDER)
+                        // Green background for CHANGE ORDER
+                        paint.setColor(Color.GREEN);
+                        c.drawRect(
+                                (float) viewHolder.itemView.getRight() + dX,
+                                (float) viewHolder.itemView.getTop(),
+                                (float) viewHolder.itemView.getRight(),
+                                (float) viewHolder.itemView.getBottom(),
+                                paint
+                        );
 
-                        deleteIcon.setBounds(iconLeft, iconTop, iconRight, iconBottom);
-                        deleteIcon.draw(c);
+                        // Draw CHANGE ORDER text
+                        actionText = "CHANGE ORDER";
+                        paint.setColor(Color.WHITE);
+                        paint.setTextSize(50);
+                        paint.setTextAlign(Paint.Align.RIGHT);
+                        textX = viewHolder.itemView.getRight() - 150;
+
+                        c.drawText(actionText, textX, viewHolder.itemView.getTop() + (viewHolder.itemView.getHeight() / 2) + 20, paint);
+
+                        // Draw update icon
+                        icon = ContextCompat.getDrawable(recyclerView.getContext(), R.drawable.update_24px);
+                        if (icon != null) {
+                            iconLeft = viewHolder.itemView.getRight() - 50 - icon.getIntrinsicWidth();
+                        }
+                    }
+
+                    // Draw the icon beside the text
+                    if (icon != null) {
+                        int iconMargin = (viewHolder.itemView.getHeight() - icon.getIntrinsicHeight()) / 2;
+                        iconTop = viewHolder.itemView.getTop() + iconMargin;
+                        iconBottom = iconTop + icon.getIntrinsicHeight();
+                        iconRight = iconLeft + icon.getIntrinsicWidth();
+                        icon.setBounds(iconLeft, iconTop, iconRight, iconBottom);
+                        icon.draw(c);
                     }
 
                     // Draw the item view itself
@@ -132,6 +167,7 @@ public class CartActivity extends AppCompatActivity {
 
         // Attach the ItemTouchHelper to the RecyclerView
         itemTouchHelper.attachToRecyclerView(cartRecyclerView);
+
 
         // Update total price display
         totalPriceDisplay = findViewById(R.id.totalpricedisplay);
