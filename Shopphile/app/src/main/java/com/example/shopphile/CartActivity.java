@@ -51,7 +51,7 @@ public class CartActivity extends AppCompatActivity {
             int productQuantity = Integer.parseInt(productData[2]);
 
             // Calculate total price for this product
-            totalPrice += productPrice * productQuantity;
+            totalPrice += productPrice;
 
             CartData cartData = new CartData(productImage, entry.getKey().replace("_data", ""), productPrice, productQuantity);
             cartDataArrayList.add(cartData);
