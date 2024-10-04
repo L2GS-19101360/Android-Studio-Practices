@@ -58,6 +58,12 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
         cv.put(COLUMN_PAGES, pages);
 
         db.update(TABLE_NAME, cv, COLUMN_ID + "=?", new String[]{String.valueOf(row_id)});
+    }
 
+    void deleteBookRecord(int row_id) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+
+        db.delete(TABLE_NAME, COLUMN_ID + "=?", new String[]{String.valueOf(row_id)});
     }
 }

@@ -1,5 +1,6 @@
 package com.example.androidsqlite;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -8,6 +9,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -70,7 +72,7 @@ public class ModifyRecordActivity extends AppCompatActivity {
         deleteRecordButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // Add your delete record logic here if needed
+                confirmDialog();
             }
         });
 
@@ -79,6 +81,35 @@ public class ModifyRecordActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+    }
+
+    void confirmDialog() {
+        AlertDialog.Builder alertBuilder = new AlertDialog.Builder(this);
+        alertBuilder.setTitle("Delete " + getBookTitle + "?");
+        alertBuilder.setMessage("Are you sure you want to delete " + getBookTitle + "?");
+        alertBuilder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                myDatabaseHelper.deleteBookRecord(Integer.parseInt(getBookId));
+                Toast.makeText(ModifyRecordActivity.this, getBookTitle + " Deleted", Toast.LENGTH_SHORT).show();
+
+                // Navigate back to MainActivity after deleting
+                Intent intent = new Intent(ModifyRecordActivity.this, MainActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+                finish();
+            }
+        });
+        alertBuilder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                // Dismiss the dialog
+                dialogInterface.dismiss();
+            }
+        });
+
+        // Don't forget to show the dialog
+        alertBuilder.create().show();
     }
 
     void getandSetSelectedIntentData() {
