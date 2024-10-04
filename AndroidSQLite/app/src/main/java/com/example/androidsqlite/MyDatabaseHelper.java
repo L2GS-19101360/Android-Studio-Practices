@@ -16,7 +16,7 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
     private static final String COLUMN_AUTHOR = "author";
     private static final String COLUMN_PAGES = "pages";
 
-    public MyDatabaseHelper(Context context) {
+    MyDatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
@@ -48,5 +48,16 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
     public Cursor readAllBookData() {
         SQLiteDatabase db = this.getReadableDatabase();
         return db.rawQuery("SELECT * FROM " + TABLE_NAME, null);
+    }
+
+    void updateBookRecord(String title, String author, int pages, int row_id){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+        cv.put(COLUMN_TITLE, title);
+        cv.put(COLUMN_AUTHOR, author);
+        cv.put(COLUMN_PAGES, pages);
+
+        db.update(TABLE_NAME, cv, COLUMN_ID + "=?", new String[]{String.valueOf(row_id)});
+
     }
 }

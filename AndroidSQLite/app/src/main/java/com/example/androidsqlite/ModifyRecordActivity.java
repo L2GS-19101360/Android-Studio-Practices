@@ -20,6 +20,8 @@ public class ModifyRecordActivity extends AppCompatActivity {
 
     String getBookId, getBookTitle, getBookAuthor, getBookPages;
 
+    MyDatabaseHelper myDatabaseHelper;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,12 +33,30 @@ public class ModifyRecordActivity extends AppCompatActivity {
         enterBookPages2 = findViewById(R.id.enterbookpages2);
 
         getandSetSelectedIntentData();
+        myDatabaseHelper = new MyDatabaseHelper(ModifyRecordActivity.this);
 
         updateRecordButton = findViewById(R.id.updaterecordbutton);
         updateRecordButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                try {
+                    // Get input data
+                    String updatedTitle = enterBookTitle2.getText().toString();
+                    String updatedAuthor = enterBookAuthor2.getText().toString();
+                    int updatedPages = Integer.parseInt(enterBookPages2.getText().toString());
 
+                    // Check for valid ID
+                    if (getBookId != null && !getBookId.isEmpty()) {
+                        myDatabaseHelper.updateBookRecord(updatedTitle, updatedAuthor, updatedPages, Integer.parseInt(getBookId));
+                        Toast.makeText(ModifyRecordActivity.this, "Record Updated", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(ModifyRecordActivity.this, "Invalid Book ID!", Toast.LENGTH_SHORT).show();
+                    }
+                } catch (NumberFormatException e) {
+                    Toast.makeText(ModifyRecordActivity.this, "Invalid input for pages!", Toast.LENGTH_SHORT).show();
+                } catch (Exception e) {
+                    Toast.makeText(ModifyRecordActivity.this, "Update Failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
