@@ -49,6 +49,12 @@ public class ModifyRecordActivity extends AppCompatActivity {
                     if (getBookId != null && !getBookId.isEmpty()) {
                         myDatabaseHelper.updateBookRecord(updatedTitle, updatedAuthor, updatedPages, Integer.parseInt(getBookId));
                         Toast.makeText(ModifyRecordActivity.this, "Record Updated", Toast.LENGTH_SHORT).show();
+
+                        // Navigate back to MainActivity
+                        Intent intent = new Intent(ModifyRecordActivity.this, MainActivity.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK); // Clear the activity stack
+                        startActivity(intent);
+                        finish(); // Close the current activity
                     } else {
                         Toast.makeText(ModifyRecordActivity.this, "Invalid Book ID!", Toast.LENGTH_SHORT).show();
                     }
@@ -64,7 +70,7 @@ public class ModifyRecordActivity extends AppCompatActivity {
         deleteRecordButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                // Add your delete record logic here if needed
             }
         });
 
