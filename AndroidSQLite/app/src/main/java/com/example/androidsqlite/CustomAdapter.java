@@ -52,10 +52,10 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.myViewHold
 
         public myViewHolder(@NonNull View itemView) {
             super(itemView);
-            bookIdDisplay = itemView.findViewById(R.id.bookiddisplay);
-            bookTitleDisplay = itemView.findViewById(R.id.booktitledisplay);
-            bookAuthorDisplay = itemView.findViewById(R.id.bookauthordisplay);
-            bookPagesDisplay = itemView.findViewById(R.id.bookpagesdisplay);
+            bookIdDisplay = itemView.findViewById(R.id.bookId);
+            bookTitleDisplay = itemView.findViewById(R.id.bookTitle);
+            bookAuthorDisplay = itemView.findViewById(R.id.bookAuthor);
+            bookPagesDisplay = itemView.findViewById(R.id.bookPages);
         }
     }
 }

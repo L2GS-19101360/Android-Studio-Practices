@@ -48,7 +48,6 @@ public class MainActivity extends AppCompatActivity {
         storeBookDataArrayList();
 
         customAdapter = new CustomAdapter(MainActivity.this, bookId, bookTitle, bookAuthor, bookPages);
-
         bookRecycleView.setAdapter(customAdapter);
         bookRecycleView.setLayoutManager(new LinearLayoutManager(MainActivity.this));
 
@@ -65,6 +64,21 @@ public class MainActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        refreshBookList();
+    }
+
+    void refreshBookList() {
+        bookId.clear();
+        bookTitle.clear();
+        bookAuthor.clear();
+        bookPages.clear();
+        storeBookDataArrayList();
+        customAdapter.notifyDataSetChanged();
     }
 
     void storeBookDataArrayList() {
