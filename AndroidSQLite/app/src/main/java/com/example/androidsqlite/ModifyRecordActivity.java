@@ -58,10 +58,10 @@ public class ModifyRecordActivity extends AppCompatActivity {
                         startActivity(intent);
                         finish(); // Close the current activity
                     } else {
-                        Toast.makeText(ModifyRecordActivity.this, "Invalid Book ID!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(ModifyRecordActivity.this, "Invalid Book ID", Toast.LENGTH_SHORT).show();
                     }
                 } catch (NumberFormatException e) {
-                    Toast.makeText(ModifyRecordActivity.this, "Invalid input for pages!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ModifyRecordActivity.this, "Invalid input for pages", Toast.LENGTH_SHORT).show();
                 } catch (Exception e) {
                     Toast.makeText(ModifyRecordActivity.this, "Update Failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                 }

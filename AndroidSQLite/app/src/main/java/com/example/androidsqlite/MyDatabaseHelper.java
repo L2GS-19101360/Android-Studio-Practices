@@ -62,7 +62,7 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
 
     void deleteBookRecord(int row_id) {
         SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues cv = new ContentValues();
+        ContentValues cv1 = new ContentValues();
 
         db.delete(TABLE_NAME, COLUMN_ID + "=?", new String[]{String.valueOf(row_id)});
     }
