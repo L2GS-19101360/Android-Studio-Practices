@@ -32,7 +32,7 @@
                 android:textSize="20sp" />
 
             <EditText
-                android:id="@+id/enterbooktitile"
+                android:id="@+id/enterbooktitile2"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -55,7 +55,7 @@
                 android:textSize="20sp" />
 
             <EditText
-                android:id="@+id/enterbookauthor"
+                android:id="@+id/enterbookauthor2"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -78,7 +78,7 @@
                 android:textSize="20sp" />
 
             <EditText
-                android:id="@+id/enterbookpages"
+                android:id="@+id/enterbookpages2"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -88,13 +88,21 @@
         </LinearLayout>
 
         <Button
-            android:id="@+id/addnewrecordbutton"
+            android:id="@+id/updaterecordbutton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="32dp"
-            android:backgroundTint="@color/green"
-            android:drawableLeft="@drawable/add_circle_24px"
-            android:text="Add New Book" />
+            android:backgroundTint="@color/orange"
+            android:drawableLeft="@drawable/edit_24px"
+            android:text="Update Book" />
+        <Button
+            android:id="@+id/deleterecordbutton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:backgroundTint="@color/red"
+            android:drawableLeft="@drawable/delete_24px"
+            android:text="Delete Book" />
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
