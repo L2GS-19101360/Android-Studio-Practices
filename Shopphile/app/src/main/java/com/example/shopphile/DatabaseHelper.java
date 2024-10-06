@@ -12,6 +12,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     // Product Table
     public static final String TABLE_PRODUCT = "Product";
+    public static final String COLUMN_PRODUCT_ID = "ProductID"; // Integer
     public static final String COLUMN_PRODUCT_IMAGE = "ProductImage"; // Integer
     public static final String COLUMN_PRODUCT_NAME = "ProductName"; // String
     public static final String COLUMN_PRODUCT_PRICE = "ProductPrice"; // Float
@@ -19,6 +20,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     // Cart Table
     public static final String TABLE_CART = "Cart";
+    public static final String COLUMN_CART_ID = "CartID"; // Integer
     public static final String COLUMN_CART_IMAGE = "CartImage"; // Integer
     public static final String COLUMN_CART_NAME = "CartName"; // String
     public static final String COLUMN_CART_PRICE = "CartPrice"; // Float
@@ -31,12 +33,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         String createProductTable = "CREATE TABLE " + TABLE_PRODUCT + " (" +
+                COLUMN_PRODUCT_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + // Add ProductID as AUTOINCREMENT
                 COLUMN_PRODUCT_IMAGE + " INTEGER, " +
                 COLUMN_PRODUCT_NAME + " TEXT, " +
                 COLUMN_PRODUCT_PRICE + " REAL, " +
                 COLUMN_PRODUCT_DESCRIPTION + " TEXT)";
 
         String createCartTable = "CREATE TABLE " + TABLE_CART + " (" +
+                COLUMN_CART_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + // Add CartID as AUTOINCREMENT
                 COLUMN_CART_IMAGE + " INTEGER, " +
                 COLUMN_CART_NAME + " TEXT, " +
                 COLUMN_CART_PRICE + " REAL, " +
