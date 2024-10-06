@@ -98,18 +98,22 @@ public class ViewProductActivity extends AppCompatActivity {
         addProductToCart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // Save data to SharedPreferences
-                SharedPreferences sharedPreferences = getSharedPreferences("CartData", MODE_PRIVATE);
-                SharedPreferences.Editor editor = sharedPreferences.edit();
+                // Get the product details
+                int productImage = getProductImage;
+                String productName = getProductName;
+                float productPrice = newTotalPrice;
 
-                // Create a unique key for each product based on its name
-                String key = getProductName + "_data";
-                String productData = getProductImage + "," + newTotalPrice + "," + productQuantityCount;
+                // Get the quantity
+                int productQuantity = productQuantityCount;
 
-                editor.putString(key, productData);
-                editor.apply();
+                // Create a DatabaseHelper instance
+                DatabaseHelper dbHelper = new DatabaseHelper(ViewProductActivity.this);
 
-                Toast.makeText(ViewProductActivity.this, "Product is Added to Cart", Toast.LENGTH_SHORT).show();
+                // Add the product to the cart in the database
+                dbHelper.addToCart(productImage, productName, productPrice, productQuantity);
+
+                // Show a message to the user
+                Toast.makeText(ViewProductActivity.this, "Added to Cart", Toast.LENGTH_SHORT).show();
             }
         });
 

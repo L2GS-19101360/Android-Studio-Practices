@@ -47,7 +47,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         dbHelper.addProduct(R.drawable.tshirt_image, "T-Shirts", 100.00f, "This is the product t-shirt products");
         dbHelper.addProduct(R.drawable.jeans_image, "Jeans", 200.00f, "This is the product jeans products");
         dbHelper.addProduct(R.drawable.hat_image, "Hats", 50.00f, "This is the product hats products");
-        dbHelper.addProduct(R.drawable.jeans_image, "Jackets", 300.00f, "This is the product jackets products");
+        dbHelper.addProduct(R.drawable.jacket_image, "Jackets", 300.00f, "This is the product jackets products");
         dbHelper.addProduct(R.drawable.suit_image, "Suits", 500.00f, "This is the product suits products");
         // Add more products as necessary...
 
