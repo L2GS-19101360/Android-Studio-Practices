@@ -1,7 +1,9 @@
 package com.example.shopphile;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -31,9 +33,11 @@ public class CartActivity extends AppCompatActivity {
 
     TextView totalPriceDisplay, shipmentPaymentDisplay, overallTotalDisplay;
 
-    float shipmentValue = 10.00F;
+    float shipmentValue = 10.00F; // Shipment value
 
-    ArrayList<CartData> cartDataArrayList = new ArrayList<>();
+    ArrayList<CartData> cartDataArrayList = new ArrayList<>(); // Cart data list
+
+    DatabaseHelper databaseHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,17 +48,24 @@ public class CartActivity extends AppCompatActivity {
         Map<String, ?> allEntries = sharedPreferences.getAll();
 
         float totalPrice = 0.0f; // Initialize total price
-        for (Map.Entry<String, ?> entry : allEntries.entrySet()) {
-            String[] productData = entry.getValue().toString().split(",");
-            int productImage = Integer.parseInt(productData[0]);
-            float productPrice = Float.parseFloat(productData[1]);
-            int productQuantity = Integer.parseInt(productData[2]);
 
-            // Calculate total price for this product
-            totalPrice += productPrice;
+        databaseHelper = new DatabaseHelper(this);
 
-            CartData cartData = new CartData(productImage, entry.getKey().replace("_data", ""), productPrice, productQuantity);
-            cartDataArrayList.add(cartData);
+        // Retrieve all cart items from the database
+        Cursor cursor = databaseHelper.getAllCartItems();
+        if (cursor != null && cursor.moveToFirst()) {
+            do {
+                @SuppressLint("Range") int image = cursor.getInt(cursor.getColumnIndex(DatabaseHelper.COLUMN_CART_IMAGE));
+                @SuppressLint("Range") String name = cursor.getString(cursor.getColumnIndex(DatabaseHelper.COLUMN_CART_NAME));
+                @SuppressLint("Range") float price = cursor.getFloat(cursor.getColumnIndex(DatabaseHelper.COLUMN_CART_PRICE));
+                @SuppressLint("Range") int quantity = cursor.getInt(cursor.getColumnIndex(DatabaseHelper.COLUMN_CART_QUANTITY));
+
+                // Create a CartData object and add it to the list
+                CartData cartData = new CartData(image, name, price, quantity);
+                cartDataArrayList.add(cartData);
+                totalPrice += price * quantity; // Update total price calculation here
+            } while (cursor.moveToNext());
+            cursor.close(); // Close the cursor after use
         }
 
         // Set up RecyclerView
@@ -76,9 +87,10 @@ public class CartActivity extends AppCompatActivity {
 
                 if (direction == ItemTouchHelper.RIGHT) {
                     // Handle the DELETE action
+                    databaseHelper.deleteCartItem(cartDataArrayList.get(position)); // Call method to delete from database
                     cartDataArrayList.remove(position);
                     cartAdapter.notifyItemRemoved(position);
-                    updateTotalPrice();
+                    updateTotalPrice(); // Update total price after deletion
                 } else if (direction == ItemTouchHelper.LEFT) {
                     // Handle the CHANGE ORDER action
                     // For example, you can show a dialog or activity to update the order
@@ -168,19 +180,20 @@ public class CartActivity extends AppCompatActivity {
         // Attach the ItemTouchHelper to the RecyclerView
         itemTouchHelper.attachToRecyclerView(cartRecyclerView);
 
-
-        // Update total price display
+        // Initialize TextViews
         totalPriceDisplay = findViewById(R.id.totalpricedisplay);
         shipmentPaymentDisplay = findViewById(R.id.shipmentpaymentdisplay);
         overallTotalDisplay = findViewById(R.id.overalltotaldisplay);
 
+        // Set shipment value
         shipmentPaymentDisplay.setText(String.format("$%.2f", shipmentValue));
-        totalPriceDisplay.setText(String.format("$%.2f", totalPrice));
 
-        // Calculate and display overall total (Total + Shipment)
+        // Set initial total price and overall total
+        totalPriceDisplay.setText(String.format("$%.2f", totalPrice));
         float overallTotal = totalPrice + shipmentValue;
         overallTotalDisplay.setText(String.format("$%.2f", overallTotal));
 
+        // Back to HomePage button click listener
         backToHomePage = findViewById(R.id.backtohomepagebutton);
         backToHomePage.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -190,20 +203,21 @@ public class CartActivity extends AppCompatActivity {
             }
         });
 
+        // Handle window insets
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, windowInsets) -> {
             Insets insets = windowInsets.getInsets(WindowInsetsCompat.Type.ime());
             return WindowInsetsCompat.CONSUMED;
         });
     }
 
-    // Optional: Update total price method
+    // Update total price method
     private void updateTotalPrice() {
-        float totalPrice = 0.0f;
+        float totalPrice = 0.0f; // Reset total price
         for (CartData cartData : cartDataArrayList) {
             totalPrice += cartData.getProductCartTotalPrice();
         }
         totalPriceDisplay.setText(String.format("$%.2f", totalPrice));
         float overallTotal = totalPrice + shipmentValue;
-        overallTotalDisplay.setText(String.format("$%.2f", overallTotal));
+        overallTotalDisplay.setText(String.format("$%.2f", overallTotal)); // Update overall total display
     }
 }
