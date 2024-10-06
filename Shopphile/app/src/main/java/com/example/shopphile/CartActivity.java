@@ -61,9 +61,9 @@ public class CartActivity extends AppCompatActivity {
                 @SuppressLint("Range") int quantity = cursor.getInt(cursor.getColumnIndex(DatabaseHelper.COLUMN_CART_QUANTITY));
 
                 // Create a CartData object and add it to the list
-                CartData cartData = new CartData(image, name, price, quantity);
+                CartData cartData = new CartData(0, image, name, price, quantity);
                 cartDataArrayList.add(cartData);
-                totalPrice += price * quantity; // Update total price calculation here
+                totalPrice += price; // Update total price calculation here
             } while (cursor.moveToNext());
             cursor.close(); // Close the cursor after use
         }
@@ -87,16 +87,14 @@ public class CartActivity extends AppCompatActivity {
 
                 if (direction == ItemTouchHelper.RIGHT) {
                     // Handle the DELETE action
-                    databaseHelper.deleteCartItem(cartDataArrayList.get(position)); // Call method to delete from database
+                    CartData cartData = cartDataArrayList.get(position);
+                    databaseHelper.deleteCartItem(cartData.getProductId()); // Call method to delete from database using the cart ID
                     cartDataArrayList.remove(position);
                     cartAdapter.notifyItemRemoved(position);
                     updateTotalPrice(); // Update total price after deletion
                 } else if (direction == ItemTouchHelper.LEFT) {
                     // Handle the CHANGE ORDER action
-                    // For example, you can show a dialog or activity to update the order
-                    // Here, I am just notifying the adapter to rebind the item
                     cartAdapter.notifyItemChanged(position);
-                    // Optionally, show a toast or dialog for the change order action
                 }
             }
 

@@ -93,9 +93,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return db.rawQuery("SELECT * FROM " + TABLE_CART, null);
     }
 
-    public void deleteCartItem(CartData id) {
+    public void deleteCartItem(int cartId) {
         SQLiteDatabase db = this.getWritableDatabase();
-        db.delete(TABLE_CART, COLUMN_CART_ID + " = ?", new String[]{String.valueOf(id)});
+        db.delete(TABLE_CART, COLUMN_CART_ID + " = ?", new String[]{String.valueOf(cartId)});
         db.close();
     }
 }
