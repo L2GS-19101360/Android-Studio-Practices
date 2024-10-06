@@ -20,7 +20,7 @@ public class ViewProductActivity extends AppCompatActivity {
 
     ImageView backToMainActivity, productImageDisplay, addProductQuantityButton, minusProductQuantityButton;
 
-    TextView productNameDisplay, productPriceDisplay, productQuantityDisplay;
+    TextView productNameDisplay, productPriceDisplay, productQuantityDisplay, productDescriptionDisplay;
 
     Button addProductToCart;
 
@@ -38,6 +38,7 @@ public class ViewProductActivity extends AppCompatActivity {
         productImageDisplay = findViewById(R.id.productimagedisplay);  // Initialize ImageView
         productNameDisplay = findViewById(R.id.productnamedisplay);    // Initialize TextView
         productPriceDisplay = findViewById(R.id.productpricedisplay);  // Initialize TextView
+        productDescriptionDisplay = findViewById(R.id.productdescriptiondisplay);
 
         // Use getIntent() to receive data from MainActivity
         Intent viewProductIntent = getIntent();
@@ -45,12 +46,14 @@ public class ViewProductActivity extends AppCompatActivity {
         int getProductImage = viewProductIntent.getIntExtra("product_image_data", -1);
         String getProductName = viewProductIntent.getStringExtra("product_name_data");
         float getProductPrice = viewProductIntent.getFloatExtra("product_price_data", 0.0F);
+        String getProductDescription = viewProductIntent.getStringExtra("product_description_data");
 
         // Set the received data to UI components
         if (getProductImage != -1) {
             productImageDisplay.setImageResource(getProductImage);
         }
         productNameDisplay.setText(getProductName);
+        productDescriptionDisplay.setText(getProductDescription);
         productPriceDisplay.setText(String.format("$%.2f", getProductPrice));
 
         addProductQuantityButton = findViewById(R.id.addproductquantitybutton);

@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -29,7 +28,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
     RecyclerView productDisplayRecycleView;
 
-    String [] deliverToOptions = {"Home", "School", "Office"};
+    String[] deliverToOptions = {"Home", "School", "Office"};
 
     ArrayList<ProductData> productDataArrayList = new ArrayList<>();
 
@@ -52,27 +51,22 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         dbHelper.addProduct(R.drawable.suit_image, "Suits", 500.00f, "This is the product suits products");
         // Add more products as necessary...
 
-        // Load products into your RecyclerView
-        loadProducts();
-
         productDisplayRecycleView = findViewById(R.id.productdisplayrecyclerviewer);
-
         // Set the layout manager
         LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         productDisplayRecycleView.setLayoutManager(layoutManager);
 
+        // Load products into your RecyclerView
+        loadProducts();
+
         // Initialize and set the adapter with the button click listener
-        ProductDisplayViewAdapter adapter = new ProductDisplayViewAdapter(productDataArrayList, new ProductDisplayViewAdapter.OnProductButtonClickListener() {
-            @Override
-            public void onProductButtonClick(ProductData product) {
-                // Show the product details in a Toast
-                //Toast.makeText(MainActivity.this, "Product: " + product.getProductName() + ", Price: $" + product.getProductPrice(), Toast.LENGTH_SHORT).show();
-                Intent mainActivityIntent = new Intent(MainActivity.this, ViewProductActivity.class);
-                mainActivityIntent.putExtra("product_image_data", product.getProductImage());
-                mainActivityIntent.putExtra("product_name_data", product.getProductName());
-                mainActivityIntent.putExtra("product_price_data", product.getProductPrice());
-                startActivity(mainActivityIntent);
-            }
+        ProductDisplayViewAdapter adapter = new ProductDisplayViewAdapter(productDataArrayList, product -> {
+            Intent mainActivityIntent = new Intent(MainActivity.this, ViewProductActivity.class);
+            mainActivityIntent.putExtra("product_image_data", product.getProductImage());
+            mainActivityIntent.putExtra("product_name_data", product.getProductName());
+            mainActivityIntent.putExtra("product_price_data", product.getProductPrice());
+            mainActivityIntent.putExtra("product_description_data", product.getProductDescription());
+            startActivity(mainActivityIntent);
         });
         productDisplayRecycleView.setAdapter(adapter);
 
@@ -85,21 +79,15 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
         // Shopping cart click listener
         shoppingCart = findViewById(R.id.shoppingcart);
-        shoppingCart.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent toShoppingCart = new Intent(MainActivity.this, CartActivity.class);
-                startActivity(toShoppingCart);
-            }
+        shoppingCart.setOnClickListener(view -> {
+            Intent toShoppingCart = new Intent(MainActivity.this, CartActivity.class);
+            startActivity(toShoppingCart);
         });
 
         notificationBell = findViewById(R.id.notificationbell);
-        notificationBell.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent toShoppingCart = new Intent(MainActivity.this, OrderActivity.class);
-                startActivity(toShoppingCart);
-            }
+        notificationBell.setOnClickListener(view -> {
+            Intent toShoppingCart = new Intent(MainActivity.this, OrderActivity.class);
+            startActivity(toShoppingCart);
         });
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
@@ -111,13 +99,16 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
     void loadProducts() {
         Cursor cursor = dbHelper.getAllProducts();
+        productDataArrayList.clear(); // Clear the list before loading products
+
         if (cursor != null && cursor.moveToFirst()) {
             do {
                 @SuppressLint("Range") int image = cursor.getInt(cursor.getColumnIndex(DatabaseHelper.COLUMN_PRODUCT_IMAGE));
                 @SuppressLint("Range") String name = cursor.getString(cursor.getColumnIndex(DatabaseHelper.COLUMN_PRODUCT_NAME));
                 @SuppressLint("Range") float price = cursor.getFloat(cursor.getColumnIndex(DatabaseHelper.COLUMN_PRODUCT_PRICE));
                 @SuppressLint("Range") String description = cursor.getString(cursor.getColumnIndex(DatabaseHelper.COLUMN_PRODUCT_DESCRIPTION));
-                // Use this data to populate your RecyclerView or other UI components
+                // Add product to the list
+                productDataArrayList.add(new ProductData(image, name, price, description));
             } while (cursor.moveToNext());
             cursor.close();
         } else {

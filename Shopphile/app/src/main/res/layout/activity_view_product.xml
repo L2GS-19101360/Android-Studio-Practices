@@ -50,8 +50,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/productnamedisplay" />
 
-
-
     <Button
         android:id="@+id/addproducttocart"
         android:layout_width="300dp"
