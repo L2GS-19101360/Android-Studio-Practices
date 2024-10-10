@@ -1,22 +1,22 @@
 package com.example.shopphile;
 
 public class CartData {
-    private int productId;
+    private int productCartId;
     private int productCartImage;
     private String productCartName;
     private float productCartPrice;
     private int productCartQuantity;
 
-    public CartData(int productId, int productCartImage, String productCartName, float productCartPrice, int productCartQuantity) {
-        this.productId = productId;
+    public CartData(int productCartId, int productCartImage, String productCartName, float productCartPrice, int productCartQuantity) {
+        this.productCartId = productCartId;
         this.productCartImage = productCartImage;
         this.productCartName = productCartName;
         this.productCartPrice = productCartPrice;
         this.productCartQuantity = productCartQuantity;
     }
 
-    public int getProductId() {
-        return productId;
+    public int getProductCartId() {
+        return productCartId;
     }
 
     public int getProductCartImage() {

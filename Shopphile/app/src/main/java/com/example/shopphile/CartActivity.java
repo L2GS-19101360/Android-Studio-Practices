@@ -55,13 +55,14 @@ public class CartActivity extends AppCompatActivity {
         Cursor cursor = databaseHelper.getAllCartItems();
         if (cursor != null && cursor.moveToFirst()) {
             do {
+                @SuppressLint("Range") int cartId = cursor.getInt(cursor.getColumnIndex(DatabaseHelper.COLUMN_CART_ID));
                 @SuppressLint("Range") int image = cursor.getInt(cursor.getColumnIndex(DatabaseHelper.COLUMN_CART_IMAGE));
                 @SuppressLint("Range") String name = cursor.getString(cursor.getColumnIndex(DatabaseHelper.COLUMN_CART_NAME));
                 @SuppressLint("Range") float price = cursor.getFloat(cursor.getColumnIndex(DatabaseHelper.COLUMN_CART_PRICE));
                 @SuppressLint("Range") int quantity = cursor.getInt(cursor.getColumnIndex(DatabaseHelper.COLUMN_CART_QUANTITY));
 
                 // Create a CartData object and add it to the list
-                CartData cartData = new CartData(0, image, name, price, quantity);
+                CartData cartData = new CartData(cartId, image, name, price, quantity);
                 cartDataArrayList.add(cartData);
                 totalPrice += price; // Update total price calculation here
             } while (cursor.moveToNext());
@@ -88,7 +89,7 @@ public class CartActivity extends AppCompatActivity {
                 if (direction == ItemTouchHelper.RIGHT) {
                     // Handle the DELETE action
                     CartData cartData = cartDataArrayList.get(position);
-                    databaseHelper.deleteCartItem(cartData.getProductId()); // Call method to delete from database using the cart ID
+                    databaseHelper.deleteCartItem(cartData.getProductCartId()); // Use CartID instead of ProductID
                     cartDataArrayList.remove(position);
                     cartAdapter.notifyItemRemoved(position);
                     updateTotalPrice(); // Update total price after deletion
