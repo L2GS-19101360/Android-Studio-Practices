@@ -2,11 +2,10 @@ package com.example.sqlitepractice;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.widget.Toast;
-
-import androidx.annotation.Nullable;
 
 public class DatabaseAdapter {
 
@@ -23,6 +22,11 @@ public class DatabaseAdapter {
         contentValues.put(myDBHelper.PASSWORD, password);
         long id = db.insert(myDBHelper.TABLE_NAME, null, contentValues);
         return id;
+    }
+
+    public Cursor getData() {
+        SQLiteDatabase db = myHelper.getReadableDatabase();
+        return db.rawQuery("SELECT * FROM " + myDBHelper.TABLE_NAME, null);
     }
 
     static class myDBHelper extends SQLiteOpenHelper {

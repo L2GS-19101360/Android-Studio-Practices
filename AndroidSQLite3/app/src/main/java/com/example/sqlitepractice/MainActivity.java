@@ -1,6 +1,7 @@
 package com.example.sqlitepractice;
 
 import android.annotation.SuppressLint;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -12,7 +13,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -21,11 +25,12 @@ public class MainActivity extends AppCompatActivity {
     RecyclerView displayUserRecycleView;
 
     DatabaseAdapter dbAdapterHelper;
+    ArrayList<UserData> userList;
+    UserAdapter userAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
 
         enterNewUsername = findViewById(R.id.enternewusername);
@@ -36,33 +41,47 @@ public class MainActivity extends AppCompatActivity {
         viewUsersButton = findViewById(R.id.viewusersbutton);
 
         dbAdapterHelper = new DatabaseAdapter(this);
+        userList = new ArrayList<>();
 
-        addUserButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String username = enterNewUsername.getText().toString().trim();
-                String password = enterNewPassword.getText().toString().trim();
+        displayUserRecycleView.setLayoutManager(new LinearLayoutManager(this));
+        userAdapter = new UserAdapter(userList);
+        displayUserRecycleView.setAdapter(userAdapter);
 
-                if (!username.isEmpty() && !password.isEmpty()) {
-                    long id = dbAdapterHelper.insertData(username, password);
-                    if (id > 0) {
-                        Toast.makeText(MainActivity.this, "User added successfully!", Toast.LENGTH_SHORT).show();
-                        enterNewUsername.setText("");
-                        enterNewPassword.setText("");
-                    } else {
-                        Toast.makeText(MainActivity.this, "Insertion failed!", Toast.LENGTH_SHORT).show();
-                    }
+        addUserButton.setOnClickListener(view -> {
+            String username = enterNewUsername.getText().toString().trim();
+            String password = enterNewPassword.getText().toString().trim();
+
+            if (!username.isEmpty() && !password.isEmpty()) {
+                long id = dbAdapterHelper.insertData(username, password);
+                if (id > 0) {
+                    Toast.makeText(MainActivity.this, "User added successfully!", Toast.LENGTH_SHORT).show();
+                    enterNewUsername.setText("");
+                    enterNewPassword.setText("");
                 } else {
-                    Toast.makeText(MainActivity.this, "Please enter all fields", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity.this, "Insertion failed!", Toast.LENGTH_SHORT).show();
                 }
+            } else {
+                Toast.makeText(MainActivity.this, "Please enter all fields", Toast.LENGTH_SHORT).show();
             }
         });
 
-        viewUsersButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        viewUsersButton.setOnClickListener(view -> fetchAndDisplayUsers());
+    }
 
-            }
-        });
+    private void fetchAndDisplayUsers() {
+        userList.clear();
+        Cursor cursor = dbAdapterHelper.getData();
+
+        if (cursor != null && cursor.moveToFirst()) {
+            do {
+                int id = cursor.getInt(0);
+                String name = cursor.getString(1);
+                String password = cursor.getString(2);
+                userList.add(new UserData(id, name, password));
+            } while (cursor.moveToNext());
+            cursor.close();
+        }
+
+        userAdapter.notifyDataSetChanged();
     }
 }
