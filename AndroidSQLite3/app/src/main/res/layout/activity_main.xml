@@ -43,6 +43,8 @@
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
                 android:layout_weight="1"
+                android:drawableLeft="@drawable/person_add_24px"
+                android:backgroundTint="@color/green"
                 android:text="Add User" />
 
             <Button
@@ -52,6 +54,7 @@
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
                 android:layout_weight="1"
+                android:drawableLeft="@drawable/view_list_24px"
                 android:text="View Users" />
 
         </LinearLayout>
