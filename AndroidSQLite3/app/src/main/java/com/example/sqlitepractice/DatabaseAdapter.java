@@ -1,0 +1,69 @@
+package com.example.sqlitepractice;
+
+import android.content.ContentValues;
+import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
+import android.widget.Toast;
+
+import androidx.annotation.Nullable;
+
+public class DatabaseAdapter {
+
+    myDBHelper myHelper;
+
+    public DatabaseAdapter(Context context) {
+        myHelper = new myDBHelper(context);
+    }
+
+    public long insertData(String username, String password) {
+        SQLiteDatabase db = myHelper.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(myDBHelper.NAME, username);
+        contentValues.put(myDBHelper.PASSWORD, password);
+        long id = db.insert(myDBHelper.TABLE_NAME, null, contentValues);
+        return id;
+    }
+
+    static class myDBHelper extends SQLiteOpenHelper {
+
+        private static final String DATABASE_NAME = "myDB.db";
+        private static final String TABLE_NAME = "myUserTable";
+        private static final int DATABASE_VERSION = 1;
+        private static final String UID = "_id";
+        private static final String NAME = "Usernames";
+        private static final String PASSWORD = "Passwords";
+
+        private Context context;
+
+        private static final String CREATE_TABLE = "CREATE TABLE " + TABLE_NAME + " (" +
+                UID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                NAME + " VARCHAR(255), " +
+                PASSWORD + " VARCHAR(255)" + ");";
+        private static final String DROP_TABLE = "DROP TABLE IF EXISTS " + TABLE_NAME;
+
+        public myDBHelper(Context context) {
+            super(context, DATABASE_NAME, null, DATABASE_VERSION);
+        }
+
+        @Override
+        public void onCreate(SQLiteDatabase sqLiteDatabase) {
+            try {
+                sqLiteDatabase.execSQL(CREATE_TABLE);
+            } catch (Exception e) {
+                Toast.makeText(context.getApplicationContext(), ""+e, Toast.LENGTH_SHORT).show();
+            }
+        }
+
+        @Override
+        public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
+            try {
+                sqLiteDatabase.execSQL(DROP_TABLE);
+                onCreate(sqLiteDatabase);
+            } catch (Exception e) {
+                Toast.makeText(context.getApplicationContext(), ""+e, Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+}
