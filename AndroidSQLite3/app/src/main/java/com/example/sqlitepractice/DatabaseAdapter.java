@@ -29,6 +29,13 @@ public class DatabaseAdapter {
         return db.rawQuery("SELECT * FROM " + myDBHelper.TABLE_NAME, null);
     }
 
+    public void deleteBookRecord(int row_id) {
+        SQLiteDatabase db = myHelper.getWritableDatabase();
+        ContentValues cv1 = new ContentValues();
+
+        db.delete(myDBHelper.TABLE_NAME, myDBHelper.UID + "=?", new String[]{String.valueOf(row_id)});
+    }
+
     static class myDBHelper extends SQLiteOpenHelper {
 
         private static final String DATABASE_NAME = "myDB.db";

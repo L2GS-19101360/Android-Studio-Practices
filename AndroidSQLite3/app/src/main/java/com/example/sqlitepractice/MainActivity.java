@@ -1,18 +1,13 @@
 package com.example.sqlitepractice;
 
-import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -44,7 +39,15 @@ public class MainActivity extends AppCompatActivity {
         userList = new ArrayList<>();
 
         displayUserRecycleView.setLayoutManager(new LinearLayoutManager(this));
-        userAdapter = new UserAdapter(userList);
+
+        userAdapter = new UserAdapter(userList, user -> {
+            Intent intent = new Intent(MainActivity.this, MainActivity2.class);
+            intent.putExtra("userId", user.getUserId());
+            intent.putExtra("username", user.getUserName());
+            intent.putExtra("password", user.getUserPassword());
+            startActivity(intent);
+        });
+
         displayUserRecycleView.setAdapter(userAdapter);
 
         addUserButton.setOnClickListener(view -> {
