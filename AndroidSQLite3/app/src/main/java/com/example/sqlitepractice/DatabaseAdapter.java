@@ -29,11 +29,23 @@ public class DatabaseAdapter {
         return db.rawQuery("SELECT * FROM " + myDBHelper.TABLE_NAME, null);
     }
 
-    public void deleteBookRecord(int row_id) {
+    public long deleteData(int row_id) {
         SQLiteDatabase db = myHelper.getWritableDatabase();
         ContentValues cv1 = new ContentValues();
 
-        db.delete(myDBHelper.TABLE_NAME, myDBHelper.UID + "=?", new String[]{String.valueOf(row_id)});
+        long id = db.delete(myDBHelper.TABLE_NAME, myDBHelper.UID + "=?", new String[]{String.valueOf(row_id)});
+        return id;
+    }
+
+    public long updateData(int row_id, String updateUsername, String updatePassword) {
+        SQLiteDatabase db = myHelper.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+
+        cv.put(myDBHelper.NAME, updateUsername);
+        cv.put(myDBHelper.PASSWORD, updatePassword);
+
+        long id = db.update(myDBHelper.TABLE_NAME, cv, myDBHelper.UID + "=?", new String[]{String.valueOf(row_id)});
+        return id;
     }
 
     static class myDBHelper extends SQLiteOpenHelper {

@@ -46,7 +46,7 @@
                 android:layout_weight="1"
                 android:drawableLeft="@drawable/person_edit_24px"
                 android:backgroundTint="@color/orange"
-                android:text="Add User" />
+                android:text="Update User" />
 
             <Button
                 android:id="@+id/deleteuserbutton"
@@ -57,7 +57,7 @@
                 android:layout_weight="1"
                 android:backgroundTint="@color/red"
                 android:drawableLeft="@drawable/person_remove_24px"
-                android:text="View Users" />
+                android:text="Delete Users" />
 
         </LinearLayout>
 
