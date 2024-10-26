@@ -6,87 +6,103 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity {
 
     EditText createNewUsername, createNewPassword;
     Button addUserButton;
-
     RecyclerView viewAllUsersRecycleView;
+
+    ArrayList<UserData> userList = new ArrayList<>();
+    UserAdapter userAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
-
-//        FirebaseDatabase database = FirebaseDatabase.getInstance();
-//        DatabaseReference myRef = database.getReference("message");
-//
-//        myRef.setValue("Hello Lorenz!");
 
         createNewUsername = findViewById(R.id.createnewusername);
         createNewPassword = findViewById(R.id.createnewpassword);
-
+        addUserButton = findViewById(R.id.adduserbutton);
         viewAllUsersRecycleView = findViewById(R.id.viewallusersrecycleview);
 
-        addUserButton = findViewById(R.id.adduserbutton);
+        userAdapter = new UserAdapter(userList);
+        viewAllUsersRecycleView.setLayoutManager(new LinearLayoutManager(this));
+        viewAllUsersRecycleView.setAdapter(userAdapter);
+
         addUserButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String createUsername = createNewUsername.getText().toString();
-                String createPassword = createNewPassword.getText().toString();
+                String username = createNewUsername.getText().toString().trim();
+                String password = createNewPassword.getText().toString().trim();
 
-                if (createUsername.isEmpty()) {
-                    createNewUsername.setError("Input Required!");
+                if (username.isEmpty()) {
+                    createNewUsername.setError("Username required");
                     return;
                 }
-                if (createPassword.isEmpty()) {
-                    createNewUsername.setError("Input Required!");
+                if (password.isEmpty()) {
+                    createNewPassword.setError("Password required");
                     return;
                 }
 
-                addDataToDB(createUsername, createPassword);
+                addDataToDB(username, password);
             }
         });
 
+        fetchDataFromDB();
     }
 
-    public void addDataToDB(String username, String password) {
-        HashMap<String, Object> dataHashMap = new HashMap<>();
-        dataHashMap.put("username", username);
-        dataHashMap.put("password", password);
-
+    private void addDataToDB(String username, String password) {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference userDataRef = database.getReference("users");
 
         String key = userDataRef.push().getKey();
+        HashMap<String, Object> dataHashMap = new HashMap<>();
         dataHashMap.put("key", key);
+        dataHashMap.put("username", username);
+        dataHashMap.put("password", password);
 
-        userDataRef.child(key).setValue(dataHashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                Toast.makeText(MainActivity.this, "User added successfully", Toast.LENGTH_SHORT).show();
+        userDataRef.child(key).setValue(dataHashMap).addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                Toast.makeText(MainActivity.this, "User added", Toast.LENGTH_SHORT).show();
                 createNewUsername.getText().clear();
                 createNewPassword.getText().clear();
+            } else {
+                Toast.makeText(MainActivity.this, "Failed to add user", Toast.LENGTH_SHORT).show();
             }
         });
+    }
 
+    private void fetchDataFromDB() {
+        DatabaseReference userDataRef = FirebaseDatabase.getInstance().getReference("users");
+        userDataRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                userList.clear();
+                for (DataSnapshot userSnapshot : snapshot.getChildren()) {
+                    UserData user = userSnapshot.getValue(UserData.class);
+                    if (user != null) userList.add(user);
+                }
+                userAdapter.notifyDataSetChanged();
+            }
 
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Toast.makeText(MainActivity.this, "Failed to load data", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }

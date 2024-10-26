@@ -4,6 +4,10 @@ public class UserData {
 
     private String key, username, password;
 
+    public UserData() {
+        // Default constructor required for calls to DataSnapshot.getValue(UserData.class)
+    }
+
     public UserData(String key, String username, String password) {
         this.key = key;
         this.username = username;
