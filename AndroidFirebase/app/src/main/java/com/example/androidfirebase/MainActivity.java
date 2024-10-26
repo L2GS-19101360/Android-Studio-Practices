@@ -25,7 +25,7 @@ import java.util.Objects;
 public class MainActivity extends AppCompatActivity {
 
     EditText createNewUsername, createNewPassword;
-    Button addUserButton, viewAllUsersButtons;
+    Button addUserButton;
 
     RecyclerView viewAllUsersRecycleView;
 
@@ -62,14 +62,6 @@ public class MainActivity extends AppCompatActivity {
                 }
 
                 addDataToDB(createUsername, createPassword);
-            }
-        });
-
-        viewAllUsersButtons = findViewById(R.id.viewallusersbutton);
-        viewAllUsersButtons.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
             }
         });
 
