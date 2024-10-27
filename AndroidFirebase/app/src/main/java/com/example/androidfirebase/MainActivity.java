@@ -1,5 +1,6 @@
 package com.example.androidfirebase;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -39,8 +40,16 @@ public class MainActivity extends AppCompatActivity {
         addUserButton = findViewById(R.id.adduserbutton);
         viewAllUsersRecycleView = findViewById(R.id.viewallusersrecycleview);
 
-        userAdapter = new UserAdapter(userList);
         viewAllUsersRecycleView.setLayoutManager(new LinearLayoutManager(this));
+        userAdapter = new UserAdapter(userList, user -> {
+            // Handle item click here
+//            Toast.makeText(MainActivity.this, "Clicked: " + user.getUsername(), Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(MainActivity.this, ModifyActivity.class);
+            intent.putExtra("selected_key", user.getKey());
+            intent.putExtra("selected_user", user.getUsername());
+            intent.putExtra("selected_password", user.getPassword());
+            startActivity(intent);
+        });
         viewAllUsersRecycleView.setAdapter(userAdapter);
 
         addUserButton.setOnClickListener(new View.OnClickListener() {

@@ -13,9 +13,11 @@ import java.util.ArrayList;
 public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder> {
 
     private ArrayList<UserData> userList;
+    private OnUserClickListener listener;
 
-    public UserAdapter(ArrayList<UserData> userList) {
+    public UserAdapter(ArrayList<UserData> userList, OnUserClickListener listener) {
         this.userList = userList;
+        this.listener = listener;
     }
 
     @NonNull
@@ -31,6 +33,13 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder
         UserData user = userList.get(position);
         holder.username.setText(user.getUsername());
         holder.password.setText(user.getPassword());
+
+        // Set the click listener on the entire item view
+        holder.itemView.setOnClickListener(v -> {
+            if (listener != null) {
+                listener.onUserClick(user);
+            }
+        });
     }
 
     @Override
@@ -47,4 +56,9 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder
             password = itemView.findViewById(R.id.displaypassword);
         }
     }
+
+    public interface OnUserClickListener {
+        void onUserClick(UserData user);
+    }
+
 }
