@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1095248282700",
+    "project_id": "suicocontactlistfirebase",
+    "storage_bucket": "suicocontactlistfirebase.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1095248282700:android:a4135e17efb0024ca4e0e9",
+        "android_client_info": {
+          "package_name": "com.example.suicocontactlistfirebase"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDKdMFoXPPM29c9wo4TCcOQsAQufs4QnBk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
