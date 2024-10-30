@@ -1,25 +1,21 @@
 package com.example.suicocontactlistfirebase;
 
 import android.widget.Toast;
-
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-
+import androidx.annotation.NonNull;
+import com.google.firebase.database.*;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class DatabaseHelper {
 
-    // Firebase instance variables
     private FirebaseDatabase database;
     private DatabaseReference myRef;
 
     public DatabaseHelper() {
-        // Initialize Firebase database and reference in the constructor
         database = FirebaseDatabase.getInstance();
         myRef = database.getReference("message");
     }
 
-    // Method to write a message to the database
     public void writeMessage(String message) {
         myRef.setValue(message).addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
@@ -31,9 +27,7 @@ public class DatabaseHelper {
     }
 
     public void addDataToDB(String contactName, int contactNumber, DatabaseCallback callback) {
-        FirebaseDatabase db = FirebaseDatabase.getInstance();
-        DatabaseReference dbRef = db.getReference("contacts");
-
+        DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference("contacts");
         String key = dbRef.push().getKey();
         HashMap<String, Object> dataHashMap = new HashMap<>();
         dataHashMap.put("contact_key", key);
@@ -42,14 +36,38 @@ public class DatabaseHelper {
 
         dbRef.child(key).setValue(dataHashMap).addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
-                callback.onSuccess();  // Call success callback
+                callback.onSuccess();
             } else {
-                callback.onFailure();  // Call failure callback
+                callback.onFailure();
             }
         });
     }
 
-    public void fetchAllDatafromDB() {
-        
+    public void fetchAllDatafromDB(ArrayList<ContactData> contactList, ContactAdapter contactAdapter) {
+        DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference("contacts");
+        dbRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                contactList.clear();
+                if (snapshot.exists()) {
+                    for (DataSnapshot data : snapshot.getChildren()) {
+                        String key = data.child("contact_key").getValue(String.class);
+                        String name = data.child("contact_name").getValue(String.class);
+                        Integer number = data.child("contact_number").getValue(Integer.class);
+                        if (key != null && name != null && number != null) {
+                            contactList.add(new ContactData(key, name, number));
+                        }
+                    }
+                    contactAdapter.notifyDataSetChanged();
+                } else {
+                    System.out.println("No contacts found.");
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                System.err.println("Failed to fetch data: " + error.getMessage());
+            }
+        });
     }
 }
