@@ -2,36 +2,36 @@ package com.example.suicocontactlistfirebase;
 
 public class ContactData {
 
-    private String key, name;
-    private int number;
+    private String contactKey, contactName;
+    private int contactNumber;
 
-    public ContactData(String key, String name, int number) {
-        this.key = key;
-        this.name = name;
-        this.number = number;
+    public ContactData(String contactKey, String contactName, int contactNumber) {
+        this.contactKey = contactKey;
+        this.contactName = contactName;
+        this.contactNumber = contactNumber;
     }
 
-    public String getKey() {
-        return key;
+    public String getContactKey() {
+        return contactKey;
     }
 
-    public void setKey(String key) {
-        this.key = key;
+    public void setContactKey(String contactKey) {
+        this.contactKey = contactKey;
     }
 
-    public String getName() {
-        return name;
+    public String getContactName() {
+        return contactName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setContactName(String contactName) {
+        this.contactName = contactName;
     }
 
-    public int getNumber() {
-        return number;
+    public int getContactNumber() {
+        return contactNumber;
     }
 
-    public void setNumber(int number) {
-        this.number = number;
+    public void setContactNumber(int contactNumber) {
+        this.contactNumber = contactNumber;
     }
 }
