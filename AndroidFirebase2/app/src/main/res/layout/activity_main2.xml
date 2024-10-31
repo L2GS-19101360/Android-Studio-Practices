@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity2">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="15dp">
+
+        <EditText
+            android:id="@+id/updatecontactnameinput"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Enter Contact Name"
+            android:inputType="text" />
+
+
+        <EditText
+            android:id="@+id/updatecontactnumberinput"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Enter Contact Number"
+            android:ems="10"
+            android:inputType="phone" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_marginTop="15dp">
+
+            <Button
+                android:id="@+id/updatecontactbutton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/orange"
+                android:drawableLeft="@drawable/person_edit_24px"
+                android:text="Update User"
+                android:layout_marginEnd="10dp" />
+
+            <Button
+                android:id="@+id/deletecontactbutton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/red"
+                android:drawableLeft="@drawable/person_remove_24px"
+                android:text="Delete User"
+                android:layout_marginStart="10dp" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>

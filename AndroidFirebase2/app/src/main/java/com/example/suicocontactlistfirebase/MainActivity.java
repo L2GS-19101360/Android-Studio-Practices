@@ -1,5 +1,6 @@
 package com.example.suicocontactlistfirebase;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
@@ -36,6 +37,13 @@ public class MainActivity extends AppCompatActivity {
         });
 
         displayAllContacts.setLayoutManager(new LinearLayoutManager(this));
+        contactAdapter = new ContactAdapter(contactList, contact -> {
+            Intent intent = new Intent(MainActivity.this, MainActivity2.class);
+            intent.putExtra("selected_contactkey", contact.getContactKey());
+            intent.putExtra("selected_contactname", contact.getContactName());
+            intent.putExtra("selected_contactnumber", String.valueOf(contact.getContactNumber()));
+            startActivity(intent);
+        });
         displayAllContacts.setAdapter(contactAdapter);
 
         // Fetch data from Firebase
