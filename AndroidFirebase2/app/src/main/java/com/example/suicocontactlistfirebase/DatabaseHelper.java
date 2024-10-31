@@ -70,4 +70,8 @@ public class DatabaseHelper {
             }
         });
     }
+
+    public void updateDataInDB(String key, String contactName, int contactNumber) {
+
+    }
 }
