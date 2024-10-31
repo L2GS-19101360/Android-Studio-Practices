@@ -71,7 +71,26 @@ public class DatabaseHelper {
         });
     }
 
-    public void updateDataInDB(String key, String contactName, int contactNumber) {
+    public void updateDataInDB(String key, String contactName, int contactNumber, DatabaseCallback callback) {
+        FirebaseDatabase.getInstance().getReference("contacts").child(key).updateChildren(new HashMap<String, Object>() {{
+            put("contact_name", contactName);
+            put("contact_number", contactNumber);
+        }}).addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                callback.onSuccess();
+            } else {
+                callback.onFailure();
+            }
+        });
+    }
 
+    public void deleteDataFromDB(String key, DatabaseCallback callback) {
+        FirebaseDatabase.getInstance().getReference("contacts").child(key).removeValue().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                callback.onSuccess();
+            } else {
+                callback.onFailure();
+            }
+        });
     }
 }
