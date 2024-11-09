@@ -23,7 +23,7 @@
             android:orientation="horizontal">
 
             <EditText
-                android:id="@+id/editTextText"
+                android:id="@+id/enternewfirstname"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:ems="10"
@@ -31,7 +31,7 @@
                 android:hint="Enter First Name" />
 
             <EditText
-                android:id="@+id/editTextText2"
+                android:id="@+id/enternewlastname"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -42,7 +42,7 @@
         </LinearLayout>
 
         <EditText
-            android:id="@+id/editTextText3"
+            android:id="@+id/enternewaddress"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
@@ -50,7 +50,7 @@
             android:hint="Enter Address" />
 
         <EditText
-            android:id="@+id/editTextPhone"
+            android:id="@+id/enternewcontactnumber"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
@@ -58,7 +58,7 @@
             android:inputType="phone" />
 
         <EditText
-            android:id="@+id/editTextTextEmailAddress2"
+            android:id="@+id/enternewemail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
@@ -71,7 +71,7 @@
             android:orientation="horizontal">
 
             <EditText
-                android:id="@+id/editTextTextPassword"
+                android:id="@+id/enternewpassword"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -80,7 +80,7 @@
                 android:inputType="textPassword" />
 
             <EditText
-                android:id="@+id/editTextTextPassword2"
+                android:id="@+id/reenternewpassword"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -92,7 +92,7 @@
 
 
         <Button
-            android:id="@+id/button3"
+            android:id="@+id/registerbutton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
