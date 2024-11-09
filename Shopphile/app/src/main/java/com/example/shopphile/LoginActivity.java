@@ -3,7 +3,6 @@ package com.example.shopphile;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -88,8 +87,45 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()) {
-                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                    startActivity(intent);
+                    // After login success, retrieve user data from Firebase
+                    FirebaseDatabase database = FirebaseDatabase.getInstance();
+                    DatabaseReference userDataRef = database.getReference("users");
+
+                    // Query the database to find the user by email
+                    userDataRef.orderByChild("email").equalTo(userEmail).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<DataSnapshot> task) {
+                            if (task.isSuccessful()) {
+                                DataSnapshot dataSnapshot = task.getResult();
+                                if (dataSnapshot.exists()) {
+                                    // Iterate through the result (there could be multiple users with the same email)
+                                    for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
+                                        // Get user data from the snapshot
+                                        String key = userSnapshot.child("key").getValue(String.class);
+                                        String firstname = userSnapshot.child("firstname").getValue(String.class);
+                                        String lastname = userSnapshot.child("lastname").getValue(String.class);
+                                        String address = userSnapshot.child("address").getValue(String.class);
+                                        String email = userSnapshot.child("email").getValue(String.class);
+                                        String password = userSnapshot.child("password").getValue(String.class);
+                                        int contactnumber = userSnapshot.child("contactnumber").getValue(Integer.class);
+
+                                        // Create a UserData object
+                                        UserData userData = new UserData(key, firstname, lastname, address, email, password, contactnumber);
+
+                                        // Pass the user data to the next activity via Intent
+                                        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                                        intent.putExtra("userData", userData);
+                                        startActivity(intent);
+                                        finish();
+                                    }
+                                } else {
+                                    Toast.makeText(getApplicationContext(), "User data not found!", Toast.LENGTH_SHORT).show();
+                                }
+                            } else {
+                                Toast.makeText(getApplicationContext(), "Failed to retrieve user data!", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
                 } else {
                     Toast.makeText(getApplicationContext(), "User login failed!", Toast.LENGTH_SHORT).show();
                 }

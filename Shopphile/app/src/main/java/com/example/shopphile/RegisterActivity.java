@@ -132,9 +132,6 @@ public class RegisterActivity extends AppCompatActivity {
         String newEmail = enterNewEmail.getText().toString().trim();
         String newPassword = enterNewPassword.getText().toString();
 
-        // Create UserData object
-        UserData userData = new UserData(newFirstName, newLastName, newAddress, newEmail, newPassword, newContactNumber);
-
         fbAuth.createUserWithEmailAndPassword(newEmail, newPassword).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
@@ -151,6 +148,9 @@ public class RegisterActivity extends AppCompatActivity {
                     dataHashMap.put("contactnumber", newContactNumber);
                     dataHashMap.put("email", newEmail);
                     dataHashMap.put("password", newPassword);
+
+                    // Create UserData object
+                    UserData userData = new UserData(key, newFirstName, newLastName, newAddress, newEmail, newPassword, newContactNumber);
 
                     userDataRef.child(key).setValue(dataHashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
