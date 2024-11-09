@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "104283972714",
+    "project_id": "suicopracticeapplication",
+    "storage_bucket": "suicopracticeapplication.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:104283972714:android:3f5c2453418398dcd55613",
+        "android_client_info": {
+          "package_name": "com.example.suicopracticeapplication"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDKjCgGf1e5XioD3TjYeV2TsUd5lbcmTO8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
