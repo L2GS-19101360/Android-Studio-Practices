@@ -23,7 +23,7 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
-    ImageView notificationBell, shoppingCart;
+    ImageView notificationBell, shoppingCart, userProfile;
     Spinner deliverToOptionSpinner;
 
     RecyclerView productDisplayRecycleView;
@@ -50,6 +50,15 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 //        dbHelper.addProduct(R.drawable.jacket_image, "Jackets", 300.00f, "This is the product jackets products");
 //        dbHelper.addProduct(R.drawable.suit_image, "Suits", 500.00f, "This is the product suits products");
         // Add more products as necessary...
+
+        userProfile = findViewById(R.id.userprofile);
+        userProfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+                startActivity(intent);
+            }
+        });
 
         productDisplayRecycleView = findViewById(R.id.productdisplayrecyclerviewer);
         // Set the layout manager
