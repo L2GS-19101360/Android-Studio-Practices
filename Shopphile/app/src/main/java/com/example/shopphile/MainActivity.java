@@ -55,6 +55,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         userProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Toast.makeText(getApplicationContext(), "User logged out", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(MainActivity.this, LoginActivity.class);
                 startActivity(intent);
             }
