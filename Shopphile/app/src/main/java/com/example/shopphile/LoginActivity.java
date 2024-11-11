@@ -113,6 +113,7 @@ public class LoginActivity extends AppCompatActivity {
                                         UserData userData = new UserData(key, firstname, lastname, address, email, password, contactnumber);
 
                                         // Pass the user data to the next activity via Intent
+                                        Toast.makeText(getApplicationContext(), "User logged in successed!", Toast.LENGTH_SHORT).show();
                                         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                                         intent.putExtra("userData", userData);
                                         startActivity(intent);
@@ -127,7 +128,7 @@ public class LoginActivity extends AppCompatActivity {
                         }
                     });
                 } else {
-                    Toast.makeText(getApplicationContext(), "User login failed!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "User logged in failed!", Toast.LENGTH_SHORT).show();
                 }
             }
         });
