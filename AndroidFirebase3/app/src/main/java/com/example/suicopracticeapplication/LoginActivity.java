@@ -7,6 +7,7 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -26,6 +27,8 @@ public class LoginActivity extends AppCompatActivity {
     EditText loginEmailInput, loginPasswordInput;
     Button loginButton;
 
+    TextView toRegisterPage;
+
     private FirebaseAuth mAuth;
 
     @SuppressLint("MissingInflatedId")
@@ -37,6 +40,15 @@ public class LoginActivity extends AppCompatActivity {
 
         loginEmailInput = findViewById(R.id.loginemailinput);
         loginPasswordInput = findViewById(R.id.loginpasswordinput);
+
+        toRegisterPage = findViewById(R.id.toregisterpage);
+        toRegisterPage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                startActivity(intent);
+            }
+        });
 
         mAuth = FirebaseAuth.getInstance();
 

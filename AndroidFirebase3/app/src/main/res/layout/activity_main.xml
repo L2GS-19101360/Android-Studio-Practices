@@ -39,6 +39,14 @@
             android:drawableLeft="@drawable/person_add_24px"
             android:text="Register Account" />
 
+        <TextView
+            android:id="@+id/tologinpage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAlignment="center"
+            android:textSize="20dp"
+            android:text="Login Page" />
+
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
