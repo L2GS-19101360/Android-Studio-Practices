@@ -65,6 +65,8 @@
             android:ems="10"
             android:hint="Enter Password"
             android:drawableRight="@drawable/show_password_24px"
+            android:focusable="true"
+            android:clickable="true"
             android:inputType="textPassword" />
 
         <EditText
@@ -75,6 +77,8 @@
             android:ems="10"
             android:hint="Confirm Password"
             android:drawableRight="@drawable/show_password_24px"
+            android:focusable="true"
+            android:clickable="true"
             android:inputType="textPassword" />
 
         <Button
