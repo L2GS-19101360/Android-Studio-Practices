@@ -4,6 +4,13 @@ public class UserData {
 
     private String userFirstName, userLastName, userEmail, userPassword;
 
+    public UserData(String userFirstName, String userLastName, String userEmail, String userPassword) {
+        this.userFirstName = userFirstName;
+        this.userLastName = userLastName;
+        this.userEmail = userEmail;
+        this.userPassword = userPassword;
+    }
+
     public String getUserFirstName() {
         return userFirstName;
     }
