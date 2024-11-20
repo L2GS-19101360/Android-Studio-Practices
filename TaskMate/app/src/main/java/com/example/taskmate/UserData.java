@@ -5,9 +5,10 @@ import android.os.Parcelable;
 
 public class UserData implements Parcelable {
 
-    private String userFirstName, userLastName, userEmail, userPassword;
+    private String userId, userFirstName, userLastName, userEmail, userPassword;
 
-    public UserData(String userFirstName, String userLastName, String userEmail, String userPassword) {
+    public UserData(String userId, String userFirstName, String userLastName, String userEmail, String userPassword) {
+        this.userId = userId;
         this.userFirstName = userFirstName;
         this.userLastName = userLastName;
         this.userEmail = userEmail;
@@ -15,6 +16,7 @@ public class UserData implements Parcelable {
     }
 
     protected UserData(Parcel in) {
+        userId = in.readString();
         userFirstName = in.readString();
         userLastName = in.readString();
         userEmail = in.readString();
@@ -40,6 +42,7 @@ public class UserData implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(userId);
         dest.writeString(userFirstName);
         dest.writeString(userLastName);
         dest.writeString(userEmail);
@@ -47,6 +50,14 @@ public class UserData implements Parcelable {
     }
 
     // Getter and Setter methods
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
 
     public String getUserFirstName() {
         return userFirstName;

@@ -144,9 +144,10 @@ public class RegisterActivity extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()) {
-                    userData = new UserData(firstName, lastName, email, password);
-
                     String userId = myAuth.getCurrentUser().getUid();
+
+                    userData = new UserData(userId, firstName, lastName, email, password);
+
                     databaseReference.child(userId).setValue(userData).addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {

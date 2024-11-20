@@ -25,10 +25,9 @@ public class MainActivity extends AppCompatActivity {
 
         displayName = findViewById(R.id.displayname);
 
-        // Retrieve the Parcelable object
         userData = getIntent().getParcelableExtra("userData");
         if (userData != null) {
-            displayName.setText(userData.getUserFirstName() + " " + userData.getUserLastName());
+            displayName.setText(userData.getUserId() + ": " +userData.getUserFirstName() + " " + userData.getUserLastName());
         } else {
             displayName.setText("No user data available");
         }
