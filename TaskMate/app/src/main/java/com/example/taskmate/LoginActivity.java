@@ -25,7 +25,7 @@ public class LoginActivity extends AppCompatActivity {
 
     boolean isPasswordVisible = false;
 
-    @SuppressLint("MissingInflatedId")
+    @SuppressLint({"MissingInflatedId", "ClickableViewAccessibility"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
