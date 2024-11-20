@@ -10,12 +10,21 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -24,6 +33,12 @@ public class LoginActivity extends AppCompatActivity {
     TextView toRegisterPage;
 
     boolean isPasswordVisible = false;
+
+    private FirebaseAuth myAuth;
+    private FirebaseDatabase firebaseDatabase;
+    private DatabaseReference databaseReference;
+
+    UserData userData;
 
     @SuppressLint({"MissingInflatedId", "ClickableViewAccessibility"})
     @Override
@@ -57,11 +72,16 @@ public class LoginActivity extends AppCompatActivity {
             return false;
         });
 
+        myAuth = FirebaseAuth.getInstance();
+
+        firebaseDatabase = FirebaseDatabase.getInstance();
+        databaseReference = firebaseDatabase.getReference("User Accounts");
+
         loginButton = findViewById(R.id.loginbutton);
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                loginUserAccount();
             }
         });
 
@@ -74,5 +94,38 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    public void loginUserAccount() {
+        String email = userEmailInput.getText().toString().trim();
+        String password = userPasswordInput.getText().toString().trim();
+
+        if (inputDataFilled(email, password)) {
+            return;
+        }
+
+        myAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+                if (task.isSuccessful()) {
+                    Toast.makeText(getApplicationContext(), "User Account success to logged in", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                    startActivity(intent);
+                } else {
+                    Toast.makeText(getApplicationContext(), "User Account failed to logged in", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+    }
+
+    public boolean inputDataFilled(String email, String password) {
+        if (email.isEmpty()) {
+            userEmailInput.setError("User Email Required!");
+            return true;
+        } else if (password.isEmpty()) {
+            userPasswordInput.setError("User Password Required!");
+            return true;
+        }
+        return false;
     }
 }
