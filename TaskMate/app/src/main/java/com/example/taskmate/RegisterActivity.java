@@ -144,7 +144,6 @@ public class RegisterActivity extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()) {
-                    // Initialize userData
                     userData = new UserData(firstName, lastName, email, password);
 
                     String userId = myAuth.getCurrentUser().getUid();
@@ -154,6 +153,7 @@ public class RegisterActivity extends AppCompatActivity {
                             if (task.isSuccessful()) {
                                 Toast.makeText(getApplicationContext(), "User Account successfully registered", Toast.LENGTH_SHORT).show();
                                 Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
+                                intent.putExtra("userData", userData); // Pass the Parcelable object
                                 startActivity(intent);
                             } else {
                                 Toast.makeText(getApplicationContext(), "User Account failed to register in Database", Toast.LENGTH_SHORT).show();

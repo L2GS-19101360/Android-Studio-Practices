@@ -14,6 +14,8 @@ public class MainActivity extends AppCompatActivity {
 
     TextView displayName;
 
+    UserData userData;
+
     @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,5 +25,12 @@ public class MainActivity extends AppCompatActivity {
 
         displayName = findViewById(R.id.displayname);
 
+        // Retrieve the Parcelable object
+        userData = getIntent().getParcelableExtra("userData");
+        if (userData != null) {
+            displayName.setText(userData.getUserFirstName() + " " + userData.getUserLastName());
+        } else {
+            displayName.setText("No user data available");
+        }
     }
 }
