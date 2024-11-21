@@ -1,5 +1,6 @@
 package com.example.taskmate;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Menu;
@@ -26,6 +27,7 @@ public class HomeActivity extends AppCompatActivity {
 
     UserData userData;
 
+    @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
