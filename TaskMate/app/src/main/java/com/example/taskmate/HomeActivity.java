@@ -1,10 +1,12 @@
 package com.example.taskmate;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Menu;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.navigation.NavigationView;
@@ -39,9 +41,8 @@ public class HomeActivity extends AppCompatActivity {
         binding.appBarHome.fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null)
-                        .setAnchorView(R.id.fab).show();
+                Intent intent = new Intent(HomeActivity.this, CreateTaskActivity.class);
+                startActivity(intent);
             }
         });
         DrawerLayout drawer = binding.drawerLayout;
@@ -55,6 +56,16 @@ public class HomeActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_home);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
+
+        navigationView.setNavigationItemSelectedListener(item -> {
+            int id = item.getItemId();
+            if (id == R.id.nav_slideshow) {
+                Intent intent = new Intent(HomeActivity.this, UpdateAccountActivity.class);
+                startActivity(intent);
+            }
+
+            return NavigationUI.onNavDestinationSelected(item, navController) || super.onSupportNavigateUp();
+        });
 
         View headerView = navigationView.getHeaderView(0);
         displayUserName = headerView.findViewById(R.id.displayusername);
