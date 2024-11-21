@@ -23,6 +23,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -108,9 +109,31 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()) {
-                    Toast.makeText(getApplicationContext(), "User Account success to logged in", Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                    startActivity(intent);
+                    String userId = myAuth.getCurrentUser().getUid();
+
+                    databaseReference.child(userId).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<DataSnapshot> task) {
+                            if (task.isSuccessful() && task.getResult().exists()) {
+                                DataSnapshot dataSnapshot = task.getResult();
+
+                                // Get first name and last name
+                                String firstName = dataSnapshot.child("userFirstName").getValue(String.class);
+                                String lastName = dataSnapshot.child("userLastName").getValue(String.class);
+                                String email = dataSnapshot.child("userEmail").getValue(String.class);
+                                String password = dataSnapshot.child("userPassword").getValue(String.class);
+
+                                userData = new UserData(userId, firstName, lastName, email, password);
+
+                                // Proceed to MainActivity
+                                Toast.makeText(getApplicationContext(), "User Account success to logged in", Toast.LENGTH_SHORT).show();
+                                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                                intent.putExtra("userData", userData);
+                                startActivity(intent);
+                            }
+                        }
+                    });
+
                 } else {
                     Toast.makeText(getApplicationContext(), "User Account failed to logged in", Toast.LENGTH_SHORT).show();
                 }
