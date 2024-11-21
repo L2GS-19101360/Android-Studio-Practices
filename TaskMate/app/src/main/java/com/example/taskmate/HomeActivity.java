@@ -57,10 +57,13 @@ public class HomeActivity extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
 
+        userData = getIntent().getParcelableExtra("userData");
+
         navigationView.setNavigationItemSelectedListener(item -> {
             int id = item.getItemId();
             if (id == R.id.nav_slideshow) {
                 Intent intent = new Intent(HomeActivity.this, UpdateAccountActivity.class);
+                intent.putExtra("userData", userData);
                 startActivity(intent);
             }
 
@@ -71,7 +74,6 @@ public class HomeActivity extends AppCompatActivity {
         displayUserName = headerView.findViewById(R.id.displayusername);
         displayUserEmail = headerView.findViewById(R.id.displayuseremail);
 
-        userData = getIntent().getParcelableExtra("userData");
         if (userData != null) {
             displayUserName.setText(userData.getUserFirstName() + " " + userData.getUserLastName());
             displayUserEmail.setText(userData.getUserEmail());

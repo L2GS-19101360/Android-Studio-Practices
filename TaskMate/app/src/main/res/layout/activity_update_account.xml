@@ -80,7 +80,7 @@
             android:layout_height="wrap_content"
             android:backgroundTint="@color/orange"
             android:layout_marginTop="25dp"
-            android:text="Register Account" />
+            android:text="Update Account" />
 
     </LinearLayout>
 
