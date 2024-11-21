@@ -153,7 +153,7 @@ public class RegisterActivity extends AppCompatActivity {
                         public void onComplete(@NonNull Task<Void> task) {
                             if (task.isSuccessful()) {
                                 Toast.makeText(getApplicationContext(), "User Account successfully registered", Toast.LENGTH_SHORT).show();
-                                Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
+                                Intent intent = new Intent(RegisterActivity.this, HomeActivity.class);
                                 intent.putExtra("userData", userData); // Pass the Parcelable object
                                 startActivity(intent);
                             } else {

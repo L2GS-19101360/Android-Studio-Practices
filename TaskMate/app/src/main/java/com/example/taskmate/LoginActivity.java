@@ -127,7 +127,7 @@ public class LoginActivity extends AppCompatActivity {
 
                                 // Proceed to MainActivity
                                 Toast.makeText(getApplicationContext(), "User Account success to logged in", Toast.LENGTH_SHORT).show();
-                                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                                Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
                                 intent.putExtra("userData", userData);
                                 startActivity(intent);
                             }
