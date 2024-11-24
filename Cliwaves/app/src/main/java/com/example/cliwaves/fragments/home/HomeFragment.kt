@@ -6,7 +6,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import com.example.cliwaves.data.CurrentLocation
 import com.example.cliwaves.databinding.FragmentHomeBinding
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 class HomeFragment : Fragment() {
 
@@ -26,6 +30,26 @@ class HomeFragment : Fragment() {
     ): View? {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        setWeatherDataAdapter()
+        setWeatherData()
+    }
+
+    private fun setWeatherDataAdapter() {
+        binding.weatherDataRecyclerView.adapter = weatherDataAdapter
+    }
+
+    private fun setWeatherData() {
+        weatherDataAdapter.setData(data = listOf(CurrentLocation(date = getCurrentDate())))
+    }
+
+    private fun getCurrentDate() : String {
+        val currenDate = Date()
+        val formatter = SimpleDateFormat("d MMMM yyyy", Locale.getDefault())
+        return "Today, ${formatter.format(currenDate)}"
     }
 
 }
