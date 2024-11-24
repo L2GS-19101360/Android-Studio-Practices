@@ -13,7 +13,9 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.example.cliwaves.data.CurrentLocation
 import com.example.cliwaves.databinding.FragmentHomeBinding
+import com.example.cliwaves.storage.SharedPreferencesManager
 import com.google.android.gms.location.LocationServices
+import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
@@ -33,6 +35,8 @@ class HomeFragment : Fragment() {
             showLocationOptions()
         }
     )
+
+    private val sharedPreferencesManager: SharedPreferencesManager by inject()
 
     private val locationPermissionLauncher = registerForActivityResult(
         ActivityResultContracts.RequestPermission()
@@ -56,7 +60,7 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setWeatherDataAdapter()
-        setWeatherData()
+        setWeatherData(currentLocation = sharedPreferencesManager.getCurrentLocation())
         setObservers()
     }
 
@@ -69,6 +73,7 @@ class HomeFragment : Fragment() {
                 }
                 currentLocationDataState.currentLocation?.let { currentLocation ->
                     hideLoading()
+                    sharedPreferencesManager.saveCurrentLocation(currentLocation)
                     setWeatherData(currentLocation)
                 }
                 currentLocationDataState.error?.let { error ->
