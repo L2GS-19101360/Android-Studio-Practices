@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">Cliwaves</string>
     <string name="search_location">Search Location</string>
+    <string name="wind">Wind Speed</string>
+    <string name="humidity">Humidity Rate</string>
+    <string name="chances_of_rain">Chances of Rain</string>
 </resources>
