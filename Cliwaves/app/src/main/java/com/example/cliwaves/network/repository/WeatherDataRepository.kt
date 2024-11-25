@@ -3,12 +3,15 @@ package com.example.cliwaves.network.repository
 import android.annotation.SuppressLint
 import android.location.Geocoder
 import com.example.cliwaves.data.CurrentLocation
+import com.example.cliwaves.data.RemoteLocation
+import com.example.cliwaves.network.api.WeatherAPI
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.Priority
 import com.google.android.gms.tasks.CancellationToken
 import com.google.android.gms.tasks.CancellationTokenSource
+import retrofit2.http.Query
 
-class WeatherDataRepository {
+class WeatherDataRepository (private val weatherAPI: WeatherAPI) {
 
     @SuppressLint("MissingPermission")
     fun getCurrentLocation(
@@ -47,6 +50,11 @@ class WeatherDataRepository {
                 location = addressText.toString()
             )
         } ?: currentLocation
+    }
+
+    suspend fun searchLocation(query: String): List<RemoteLocation>? {
+        val response = weatherAPI.searchLocation(query = query)
+        return if (response.isSuccessful) response.body() else null
     }
 
 }
