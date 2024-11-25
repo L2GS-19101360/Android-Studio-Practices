@@ -6,14 +6,15 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.cliwaves.data.CurrentLocation
+import com.example.cliwaves.data.LiveDataEvent
 import com.example.cliwaves.network.repository.WeatherDataRepository
 import com.google.android.gms.location.FusedLocationProviderClient
 import kotlinx.coroutines.launch
 
 class HomeViewModel(private val weatherDataRepository: WeatherDataRepository) : ViewModel() {
 
-    private val _currentLocation = MutableLiveData<CurrentLocationDataState>()
-    val currentLocation: LiveData<CurrentLocationDataState> get() = _currentLocation
+    private val _currentLocation = MutableLiveData<LiveDataEvent<CurrentLocationDataState>>()
+    val currentLocation: LiveData<LiveDataEvent<CurrentLocationDataState>> get() = _currentLocation
 
     fun getCurrentLocation(
         fusedLocationProviderClient: FusedLocationProviderClient,
@@ -56,7 +57,7 @@ class HomeViewModel(private val weatherDataRepository: WeatherDataRepository) : 
         error: String? = null
     ) {
         val currentLocationDataState = CurrentLocationDataState(isLoading, currentLocation, error)
-        _currentLocation.value = currentLocationDataState
+        _currentLocation.value = LiveDataEvent(currentLocationDataState)
     }
 
     data class CurrentLocationDataState(
