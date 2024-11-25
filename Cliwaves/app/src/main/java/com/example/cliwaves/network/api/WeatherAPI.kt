@@ -1,6 +1,7 @@
 package com.example.cliwaves.network.api
 
 import com.example.cliwaves.data.RemoteLocation
+import com.example.cliwaves.data.RemoteWeatherData
 import okhttp3.Response
 import retrofit2.http.GET
 import retrofit2.http.Query
@@ -17,5 +18,11 @@ interface WeatherAPI {
         @Query("key") key: String = API_KEY,
         @Query("q") query: String
     ): retrofit2.Response<List<RemoteLocation>>
+
+    @GET("forecast.json")
+    suspend fun getWeatherData(
+        @Query("key") key: String = API_KEY,
+        @Query("q") query: String
+    ): retrofit2.Response<RemoteWeatherData>
 
 }
