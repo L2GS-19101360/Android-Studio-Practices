@@ -125,7 +125,7 @@ public class SignUpActivity extends AppCompatActivity {
 
     private Boolean isValidSignUpDetails() {
         if (encodedImage == null) {
-            showToast("Select profile image");
+            showToast("Select profile image!");
             return false;
         } else if (binding.inputName.getText().toString().trim().isEmpty()) {
             showToast("Enter name");
