@@ -10,6 +10,9 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.RecyclerView
+import com.example.cliwaves.data.RemoteLocation
 import com.example.cliwaves.databinding.FragmentLocationBinding
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import retrofit2.http.Query
@@ -20,6 +23,12 @@ class LocationFragment : Fragment() {
     private val binding get() = requireNotNull(_binding)
 
     private val locationViewModel: LocationViewModel by viewModel()
+
+    private val locationsAdapter = LocationsAdapter(
+        onLocationClicked = { remoteLocation ->
+            setLocation(remoteLocation)
+        }
+    )
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -33,7 +42,15 @@ class LocationFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setListeners()
+        setupLocationRecyclerView()
         setObservers()
+    }
+
+    private fun setupLocationRecyclerView() {
+        with(binding.locationsRecyclerView) {
+            addItemDecoration(DividerItemDecoration(requireContext(), RecyclerView.VERTICAL))
+            adapter = locationsAdapter
+        }
     }
 
     private fun setListeners() {
@@ -49,6 +66,10 @@ class LocationFragment : Fragment() {
         }
     }
 
+    private fun setLocation(remoteLocation: RemoteLocation) {
+
+    }
+
     private fun setObservers() {
         locationViewModel.searchResult.observe(viewLifecycleOwner) {
             val searchResultDataState = it ?: return@observe
@@ -59,7 +80,8 @@ class LocationFragment : Fragment() {
                 binding.progressBar.visibility = View.GONE
             }
             searchResultDataState.locations?.let { remoteLocations ->
-                Toast.makeText(requireContext(), "${remoteLocations.size} Location(s) found", Toast.LENGTH_SHORT).show()
+                binding.locationsRecyclerView.visibility = View.VISIBLE
+                locationsAdapter.setData(remoteLocations)
             }
             searchResultDataState.error?.let { error ->
                 Toast.makeText(requireContext(), error, Toast.LENGTH_SHORT).show()
