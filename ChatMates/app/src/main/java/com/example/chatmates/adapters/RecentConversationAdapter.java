@@ -10,16 +10,20 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.chatmates.databinding.ItemContainerRecentConversionBinding;
+import com.example.chatmates.listeners.ConversionListener;
 import com.example.chatmates.models.ChatMessage;
+import com.example.chatmates.models.User;
 
 import java.util.List;
 
 public class RecentConversationAdapter extends RecyclerView.Adapter<RecentConversationAdapter.ConversionViewHolder> {
 
     private final List<ChatMessage> chatMessages;
+    private final ConversionListener conversionListener;
 
-    public RecentConversationAdapter(List<ChatMessage> chatMessages) {
+    public RecentConversationAdapter(List<ChatMessage> chatMessages, ConversionListener conversionListener) {
         this.chatMessages = chatMessages;
+        this.conversionListener = conversionListener;
     }
 
     @NonNull
@@ -57,6 +61,13 @@ public class RecentConversationAdapter extends RecyclerView.Adapter<RecentConver
             binding.imageProfile.setImageBitmap(getConversionImage(chatMessage.conversionImage));
             binding.textName.setText(chatMessage.conversionName);
             binding.textRecentMessage.setText(chatMessage.message);
+            binding.getRoot().setOnClickListener(v -> {
+                User user = new User();
+                user.id = chatMessage.conversionId;
+                user.name = chatMessage.conversionName;
+                user.image = chatMessage.conversionImage;
+                conversionListener.onConversionClicked(user);
+            });
         }
 
     }
