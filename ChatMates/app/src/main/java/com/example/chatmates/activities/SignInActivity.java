@@ -16,7 +16,9 @@ import com.example.chatmates.R;
 import com.example.chatmates.databinding.ActivitySignInBinding;
 import com.example.chatmates.utilities.Constants;
 import com.example.chatmates.utilities.PreferenceManager;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.HashMap;
@@ -30,11 +32,11 @@ public class SignInActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         preferenceManager = new PreferenceManager(getApplicationContext());
-//        if (preferenceManager.getBoolean(Constants.KEY_IS_SIGNED_IN)) {
-//            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-//            startActivity(intent);
-//            finish();
-//        }
+        if (preferenceManager.getBoolean(Constants.KEY_IS_SIGNED_IN)) {
+            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+            startActivity(intent);
+            finish();
+        }
         binding = ActivitySignInBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         setListeners();
