@@ -3,6 +3,8 @@ package com.example.chatmates.activities;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 
 import androidx.activity.EdgeToEdge;
@@ -37,7 +39,11 @@ public class UsersActivity extends BaseActivity implements UserListener {
         preferenceManager = new PreferenceManager(getApplicationContext());
         setListeners();
         getUsers();
+        setupSearchListener(); // Add this line to initialize the search functionality
     }
+
+    private List<User> allUsers = new ArrayList<>(); // Store all users fetched from Firestore
+    private UsersAdapter usersAdapter;
 
     private void setListeners() {
         binding.imageBack.setOnClickListener(v -> onBackPressed());
@@ -52,7 +58,7 @@ public class UsersActivity extends BaseActivity implements UserListener {
                     loading(false);
                     String currentUserId = preferenceManager.getString(Constants.KEY_USER_ID);
                     if (task.isSuccessful() && task.getResult() != null) {
-                        List<User> users = new ArrayList<>();
+                        allUsers.clear(); // Clear the list to avoid duplicates
                         for (QueryDocumentSnapshot queryDocumentSnapshot : task.getResult()) {
                             if (currentUserId.equals(queryDocumentSnapshot.getId())) {
                                 continue;
@@ -63,10 +69,10 @@ public class UsersActivity extends BaseActivity implements UserListener {
                             user.image = queryDocumentSnapshot.getString(Constants.KEY_IMAGE);
                             user.token = queryDocumentSnapshot.getString(Constants.KEY_FCM_TOKEN);
                             user.id = queryDocumentSnapshot.getId();
-                            users.add(user);
+                            allUsers.add(user);
                         }
-                        if (users.size() > 0) {
-                            UsersAdapter usersAdapter = new UsersAdapter(users, this);
+                        if (allUsers.size() > 0) {
+                            usersAdapter = new UsersAdapter(allUsers, this);
                             binding.usersRecyclerView.setAdapter(usersAdapter);
                             binding.usersRecyclerView.setVisibility(View.VISIBLE);
                         } else {
@@ -91,6 +97,53 @@ public class UsersActivity extends BaseActivity implements UserListener {
         }
     }
 
+    private void setupSearchListener() {
+        binding.searchUser.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                // No action needed here
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                filterUsers(s.toString().trim());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                // No action needed here
+            }
+        });
+    }
+
+    private void filterUsers(String query) {
+        if (usersAdapter == null) {
+            return;
+        }
+
+        if (query.isEmpty()) {
+            // If search is empty, show all users
+            usersAdapter.updateUserList(allUsers);
+        } else {
+            // Filter users based on the query
+            List<User> filteredUsers = new ArrayList<>();
+            for (User user : allUsers) {
+                if (user.name.toLowerCase().contains(query.toLowerCase())) {
+                    filteredUsers.add(user);
+                }
+            }
+            if (filteredUsers.isEmpty()) {
+                binding.textErrorMessage.setText("No users found");
+                binding.textErrorMessage.setVisibility(View.VISIBLE);
+                binding.usersRecyclerView.setVisibility(View.GONE);
+            } else {
+                binding.textErrorMessage.setVisibility(View.GONE);
+                binding.usersRecyclerView.setVisibility(View.VISIBLE);
+                usersAdapter.updateUserList(filteredUsers);
+            }
+        }
+    }
+
     @Override
     public void onUserClicked(User user) {
         Intent intent = new Intent(getApplicationContext(), ChatActivity.class);
@@ -98,4 +151,5 @@ public class UsersActivity extends BaseActivity implements UserListener {
         startActivity(intent);
         finish();
     }
+
 }

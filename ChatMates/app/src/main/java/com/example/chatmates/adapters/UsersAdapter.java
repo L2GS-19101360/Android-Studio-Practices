@@ -16,14 +16,20 @@ import com.example.chatmates.models.User;
 
 import java.util.List;
 
-public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.UserViewHolder>{
+public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.UserViewHolder> {
 
-    private final List<User> users;
+    private List<User> users;
     private final UserListener userListener;
 
     public UsersAdapter(List<User> users, UserListener userListener) {
         this.users = users;
         this.userListener = userListener;
+    }
+
+    // Add the updateUserList method here
+    public void updateUserList(List<User> newUsers) {
+        this.users = newUsers;
+        notifyDataSetChanged();
     }
 
     @NonNull
@@ -67,5 +73,5 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.UserViewHold
         byte[] bytes = Base64.decode(encodedImage, Base64.DEFAULT);
         return BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
     }
-
 }
+
