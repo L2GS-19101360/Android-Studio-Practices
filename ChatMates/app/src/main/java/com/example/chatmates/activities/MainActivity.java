@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Base64;
 import android.view.View;
 import android.widget.Toast;
@@ -37,6 +39,7 @@ public class MainActivity extends BaseActivity implements ConversionListener {
     private ActivityMainBinding binding;
     private PreferenceManager preferenceManager;
     private List<ChatMessage> conversations;
+    private List<ChatMessage> filteredConversations; // New list for filtered conversations
     private RecentConversationAdapter conversationAdapter;
     private FirebaseFirestore database;
 
@@ -51,11 +54,13 @@ public class MainActivity extends BaseActivity implements ConversionListener {
         getToken();
         setListeners();
         listenConversations();
+        setupSearchUser(); // New method for filtering conversations
     }
 
     private void init() {
         conversations = new ArrayList<>();
-        conversationAdapter = new RecentConversationAdapter(conversations, this);
+        filteredConversations = new ArrayList<>();
+        conversationAdapter = new RecentConversationAdapter(filteredConversations, this);
         binding.conversationRecyclerView.setAdapter(conversationAdapter);
         database = FirebaseFirestore.getInstance();
     }
@@ -76,6 +81,25 @@ public class MainActivity extends BaseActivity implements ConversionListener {
         Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
     }
 
+    private void setupSearchUser() {
+        binding.searchUser.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                // No action needed
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                filterConversations(s.toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                // No action needed
+            }
+        });
+    }
+
     private void listenConversations() {
         database.collection(Constants.KEY_COLLECTION_CONVERSATIONS)
                 .whereEqualTo(Constants.KEY_SENDER_ID, preferenceManager.getString(Constants.KEY_USER_ID))
@@ -83,6 +107,21 @@ public class MainActivity extends BaseActivity implements ConversionListener {
         database.collection(Constants.KEY_COLLECTION_CONVERSATIONS)
                 .whereEqualTo(Constants.KEY_RECEIVER_ID, preferenceManager.getString(Constants.KEY_USER_ID))
                 .addSnapshotListener(eventListener);
+    }
+
+    private void filterConversations(String query) {
+        filteredConversations.clear();
+        if (query.isEmpty()) {
+            filteredConversations.addAll(conversations);
+        } else {
+            for (ChatMessage conversation : conversations) {
+                if (conversation.conversionName != null &&
+                        conversation.conversionName.toLowerCase().contains(query.toLowerCase())) {
+                    filteredConversations.add(conversation);
+                }
+            }
+        }
+        conversationAdapter.notifyDataSetChanged();
     }
 
     private final EventListener<QuerySnapshot> eventListener = (value, error) -> {
@@ -122,7 +161,7 @@ public class MainActivity extends BaseActivity implements ConversionListener {
                 }
             }
             Collections.sort(conversations, (obj1, obj2) -> obj2.dateObject.compareTo(obj1.dateObject));
-            conversationAdapter.notifyDataSetChanged();
+            filterConversations(binding.searchUser.getText().toString()); // Apply filter on update
             binding.conversationRecyclerView.smoothScrollToPosition(0);
             binding.conversationRecyclerView.setVisibility(View.VISIBLE);
             binding.progressBar.setVisibility(View.GONE);
