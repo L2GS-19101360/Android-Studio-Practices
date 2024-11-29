@@ -1,7 +1,10 @@
 package com.example.chatmates.activities;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.util.Base64;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -36,7 +39,17 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     private void loadProfileDetail() {
+        String userName = getIntent().getStringExtra(Constants.KEY_NAME);
+        String userEmail = getIntent().getStringExtra(Constants.KEY_EMAIL);
+        String userPassword = getIntent().getStringExtra(Constants.KEY_PASSWORD);
 
+        byte[] bytes = Base64.decode(getIntent().getStringExtra(Constants.KEY_IMAGE), Base64.DEFAULT);
+        Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+        binding.imageProfile.setImageBitmap(bitmap);
 
+        binding.inputName.setText(userName);
+        binding.inputEmail.setText(userEmail);
+        binding.inputPassword.setText(userPassword);
+        binding.inputConfirmPassword.setText(userPassword);
     }
 }

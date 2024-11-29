@@ -70,7 +70,11 @@ public class MainActivity extends BaseActivity implements ConversionListener {
         binding.fabNewChat.setOnClickListener(v -> startActivity(new Intent(getApplicationContext(), UsersActivity.class)));
         binding.imageProfile.setOnClickListener(v -> {
             Intent intent = new Intent(getApplicationContext(), ProfileActivity.class);
-
+            intent.putExtra(Constants.KEY_USER_ID, preferenceManager.getString(Constants.KEY_USER_ID));
+            intent.putExtra(Constants.KEY_IMAGE, preferenceManager.getString(Constants.KEY_IMAGE));
+            intent.putExtra(Constants.KEY_NAME, preferenceManager.getString(Constants.KEY_NAME));
+            intent.putExtra(Constants.KEY_EMAIL, preferenceManager.getString(Constants.KEY_EMAIL));
+            intent.putExtra(Constants.KEY_PASSWORD, preferenceManager.getString(Constants.KEY_PASSWORD));
             startActivity(intent);
         });
     }
