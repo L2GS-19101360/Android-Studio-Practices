@@ -69,7 +69,15 @@
                 android:scaleType="centerCrop"
                 app:riv_oval="true" />
 
-
+            <TextView
+                android:id="@+id/textAddImage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="@string/add_image"
+                android:textColor="@color/secondary_text"
+                android:visibility="invisible"
+                android:textSize="@dimen/_10ssp"/>
 
         </FrameLayout>
 
@@ -140,7 +148,7 @@
             android:animateLayoutChanges="true">
 
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/buttonSignUp"
+                android:id="@+id/buttonUpdate"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_50sdp"
                 android:text="@string/update"
