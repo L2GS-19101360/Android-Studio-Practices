@@ -176,7 +176,11 @@ public class ChatActivity extends BaseActivity {
         binding.imageBack.setOnClickListener(v -> onBackPressed());
         binding.layoutSend.setOnClickListener(v -> sendMessage());
         binding.imageInfo.setOnClickListener(v -> {
+            receiverUser = (User) getIntent().getSerializableExtra(Constants.KEY_USER);
             Intent intent = new Intent(getApplicationContext(), RecipientActivity.class);
+            intent.putExtra(Constants.KEY_RECEIVER_IMAGE, receiverUser.image);
+            intent.putExtra(Constants.KEY_RECEIVER_NAME, receiverUser.name);
+            intent.putExtra(Constants.KEY_RECEIVER_EMAIL, receiverUser.email);
             startActivity(intent);
         });
     }
