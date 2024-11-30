@@ -1,5 +1,6 @@
 package com.example.chatmates.activities;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -77,6 +78,29 @@ public class MainActivity extends BaseActivity implements ConversionListener {
             intent.putExtra(Constants.KEY_PASSWORD, preferenceManager.getString(Constants.KEY_PASSWORD));
             startActivity(intent);
         });
+
+        // Add long-click listener for deleting conversations
+        conversationAdapter.setOnConversationLongClickListener(chatMessage -> {
+            new AlertDialog.Builder(MainActivity.this)
+                    .setTitle("Delete Conversation")
+                    .setMessage("Are you sure you want to delete this conversation?")
+                    .setPositiveButton("Yes", (dialog, which) -> deleteMessage(chatMessage))
+                    .setNegativeButton("No", (dialog, which) -> dialog.dismiss())
+                    .show();
+        });
+    }
+
+    private void deleteMessage(ChatMessage chatMessage) {
+        // Remove conversation from Firestore
+        database.collection(Constants.KEY_COLLECTION_CONVERSATIONS)
+                .document(chatMessage.conversionId)
+                .delete()
+                .addOnSuccessListener(unused -> {
+                    conversations.remove(chatMessage);
+                    filterConversations(binding.searchUser.getText().toString());
+                    showToast("Conversation deleted successfully");
+                })
+                .addOnFailureListener(e -> showToast("Failed to delete conversation"));
     }
 
     private void loadUserDetails() {

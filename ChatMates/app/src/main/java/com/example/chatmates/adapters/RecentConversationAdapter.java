@@ -20,10 +20,15 @@ public class RecentConversationAdapter extends RecyclerView.Adapter<RecentConver
 
     private final List<ChatMessage> chatMessages;
     private final ConversionListener conversionListener;
+    private OnConversationLongClickListener longClickListener; // New interface for long clicks
 
     public RecentConversationAdapter(List<ChatMessage> chatMessages, ConversionListener conversionListener) {
         this.chatMessages = chatMessages;
         this.conversionListener = conversionListener;
+    }
+
+    public void setOnConversationLongClickListener(OnConversationLongClickListener listener) {
+        this.longClickListener = listener;
     }
 
     @NonNull
@@ -55,6 +60,15 @@ public class RecentConversationAdapter extends RecyclerView.Adapter<RecentConver
         ConversionViewHolder(ItemContainerRecentConversionBinding itemContainerRecentConversionBinding) {
             super(itemContainerRecentConversionBinding.getRoot());
             binding = itemContainerRecentConversionBinding;
+
+            // Handle long-click
+            binding.getRoot().setOnLongClickListener(v -> {
+                if (longClickListener != null) {
+                    longClickListener.onConversationLongClick(chatMessages.get(getAdapterPosition()));
+                    return true;
+                }
+                return false;
+            });
         }
 
         void setData(ChatMessage chatMessage) {
@@ -70,12 +84,16 @@ public class RecentConversationAdapter extends RecyclerView.Adapter<RecentConver
                 conversionListener.onConversionClicked(user);
             });
         }
-
     }
 
     private Bitmap getConversionImage(String encodedImage) {
         byte[] bytes = Base64.decode(encodedImage, Base64.DEFAULT);
         return BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+    }
+
+    // Interface for long-click handling
+    public interface OnConversationLongClickListener {
+        void onConversationLongClick(ChatMessage chatMessage);
     }
 
 }
