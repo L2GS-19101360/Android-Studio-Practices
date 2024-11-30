@@ -2,7 +2,10 @@ package com.example.chatmates.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.InputType;
+import android.text.method.PasswordTransformationMethod;
 import android.util.Patterns;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Toast;
 
@@ -40,6 +43,7 @@ public class SignInActivity extends AppCompatActivity {
         binding = ActivitySignInBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         setListeners();
+        setupPasswordVisibilityToggle();
     }
 
     private void setListeners() {
@@ -51,6 +55,37 @@ public class SignInActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    private void setupPasswordVisibilityToggle() {
+        binding.inputPassword.setOnTouchListener((v, event) -> {
+            final int DRAWABLE_END = 2; // Index for right drawable
+            if (event.getAction() == MotionEvent.ACTION_UP) {
+                if (event.getRawX() >= (binding.inputPassword.getRight()
+                        - binding.inputPassword.getCompoundDrawables()[DRAWABLE_END].getBounds().width())) {
+
+                    // Toggle password visibility
+                    if (binding.inputPassword.getTransformationMethod() instanceof PasswordTransformationMethod) {
+                        // Show password
+                        binding.inputPassword.setTransformationMethod(null);
+                        binding.inputPassword.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+                        binding.inputPassword.setCompoundDrawablesWithIntrinsicBounds(
+                                null, null, getDrawable(R.drawable.round_visibility_off_24), null);
+                    } else {
+                        // Hide password
+                        binding.inputPassword.setTransformationMethod(new PasswordTransformationMethod());
+                        binding.inputPassword.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                        binding.inputPassword.setCompoundDrawablesWithIntrinsicBounds(
+                                null, null, getDrawable(R.drawable.round_visibility_24), null);
+                    }
+
+                    // Set cursor to the end of the text
+                    binding.inputPassword.setSelection(binding.inputPassword.getText().length());
+                    return true;
+                }
+            }
+            return false;
+        });
     }
 
     private void signIn() {
