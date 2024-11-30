@@ -15,17 +15,23 @@ import java.util.List;
 
 public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
 
+    public interface MessageActionListener {
+        void onMessageLongClicked(ChatMessage chatMessage);
+    }
+
     private final List<ChatMessage> chatMessages;
     private final Bitmap receiverProfileImage;
     private final String senderId;
+    private final MessageActionListener actionListener;
 
     public static final int VIEW_TYPE_SENT = 1;
     public static final int VIEW_TYPE_RECEIVED = 2;
 
-    public ChatAdapter(List<ChatMessage> chatMessages, Bitmap receiverProfileImage, String senderId) {
+    public ChatAdapter(List<ChatMessage> chatMessages, Bitmap receiverProfileImage, String senderId, MessageActionListener actionListener) {
         this.chatMessages = chatMessages;
         this.receiverProfileImage = receiverProfileImage;
         this.senderId = senderId;
+        this.actionListener = actionListener;
     }
 
     @NonNull
@@ -69,13 +75,17 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
         }
     }
 
-    static class SentMessageViewHolder extends RecyclerView.ViewHolder {
+    class SentMessageViewHolder extends RecyclerView.ViewHolder {
 
         private final ItemContainerSentMessageBinding binding;
 
         SentMessageViewHolder(ItemContainerSentMessageBinding itemContainerSentMessageBinding) {
             super(itemContainerSentMessageBinding.getRoot());
             binding = itemContainerSentMessageBinding;
+            binding.getRoot().setOnLongClickListener(v -> {
+                actionListener.onMessageLongClicked(chatMessages.get(getAdapterPosition()));
+                return true;
+            });
         }
 
         void setData(ChatMessage chatMessage) {

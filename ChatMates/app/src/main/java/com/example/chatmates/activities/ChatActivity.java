@@ -1,5 +1,6 @@
 package com.example.chatmates.activities;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -65,10 +66,37 @@ public class ChatActivity extends BaseActivity {
         chatAdapter = new ChatAdapter(
                 chatMessages,
                 getBitmapFromEncodedString(receiverUser.image),
-                preferenceManager.getString(Constants.KEY_USER_ID)
+                preferenceManager.getString(Constants.KEY_USER_ID),
+                this::showDeleteConfirmationDialog
         );
         binding.chatRecyclerView.setAdapter(chatAdapter);
         database = FirebaseFirestore.getInstance();
+    }
+
+    private void showDeleteConfirmationDialog(ChatMessage chatMessage) {
+        new AlertDialog.Builder(this)
+                .setTitle("Delete Message")
+                .setMessage("Are you sure you want to delete this message?")
+                .setPositiveButton("Yes", (dialog, which) -> deleteMessage(chatMessage))
+                .setNegativeButton("No", null)
+                .show();
+    }
+
+    private void deleteMessage(ChatMessage chatMessage) {
+        database.collection(Constants.KEY_COLLECTION_CHAT)
+                .whereEqualTo(Constants.KEY_SENDER_ID, chatMessage.senderId)
+                .whereEqualTo(Constants.KEY_RECEIVER_ID, chatMessage.receiverId)
+                .whereEqualTo(Constants.KEY_MESSAGE, chatMessage.message)
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    if (!queryDocumentSnapshots.isEmpty()) {
+                        for (DocumentSnapshot snapshot : queryDocumentSnapshots.getDocuments()) {
+                            snapshot.getReference().delete();
+                        }
+                        chatMessages.remove(chatMessage);
+                        chatAdapter.notifyDataSetChanged();
+                    }
+                });
     }
 
     private void sendMessage() {
