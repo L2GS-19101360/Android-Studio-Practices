@@ -8,9 +8,12 @@ import android.net.InetAddresses;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.text.InputType;
 import android.util.Base64;
 import android.util.Patterns;
+import android.view.MotionEvent;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -61,6 +64,48 @@ public class SignUpActivity extends AppCompatActivity {
             intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
             pickImage.launch(intent);
         });
+
+        binding.inputPassword.setCompoundDrawablesWithIntrinsicBounds(null, null,
+                getDrawable(R.drawable.round_visibility_24), null);
+        binding.inputPassword.setOnTouchListener((v, event) -> {
+            if (event.getAction() == MotionEvent.ACTION_UP) {
+                int drawableEndIndex = 2; // index for drawableEnd
+                if (event.getRawX() >= (binding.inputPassword.getRight() -
+                        binding.inputPassword.getCompoundDrawables()[drawableEndIndex].getBounds().width())) {
+                    togglePasswordVisibility(binding.inputPassword);
+                    return true;
+                }
+            }
+            return false;
+        });
+
+        // Toggle password visibility for inputConfirmPassword
+        binding.inputConfirmPassword.setCompoundDrawablesWithIntrinsicBounds(null, null,
+                getDrawable(R.drawable.round_visibility_24), null);
+        binding.inputConfirmPassword.setOnTouchListener((v, event) -> {
+            if (event.getAction() == MotionEvent.ACTION_UP) {
+                int drawableEndIndex = 2; // index for drawableEnd
+                if (event.getRawX() >= (binding.inputConfirmPassword.getRight() -
+                        binding.inputConfirmPassword.getCompoundDrawables()[drawableEndIndex].getBounds().width())) {
+                    togglePasswordVisibility(binding.inputConfirmPassword);
+                    return true;
+                }
+            }
+            return false;
+        });
+    }
+
+    private void togglePasswordVisibility(EditText editText) {
+        if (editText.getInputType() == (InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD)) {
+            editText.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+            editText.setCompoundDrawablesWithIntrinsicBounds(null, null,
+                    getDrawable(R.drawable.round_visibility_off_24), null);
+        } else {
+            editText.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+            editText.setCompoundDrawablesWithIntrinsicBounds(null, null,
+                    getDrawable(R.drawable.round_visibility_24), null);
+        }
+        editText.setSelection(editText.getText().length()); // Keep cursor at the end
     }
     
     private void showToast(String message) {

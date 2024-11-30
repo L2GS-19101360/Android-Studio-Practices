@@ -94,6 +94,7 @@
             android:paddingStart="@dimen/_16sdp"
             android:paddingEnd="@dimen/_16sdp"
             android:textColor="@color/primary_text"
+            android:drawableEnd="@drawable/round_visibility_24"
             android:textSize="@dimen/_13ssp"/>
 
         <EditText
@@ -109,6 +110,7 @@
             android:paddingStart="@dimen/_16sdp"
             android:paddingEnd="@dimen/_16sdp"
             android:textColor="@color/primary_text"
+            android:drawableEnd="@drawable/round_visibility_24"
             android:textSize="@dimen/_13ssp"/>
 
         <FrameLayout
