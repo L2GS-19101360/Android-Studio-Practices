@@ -22,9 +22,23 @@
         app:layout_constraintTop_toTopOf="parent"
         app:riv_corner_radius="@dimen/_8sdp" />
 
-    <androidx.appcompat.widget.AppCompatImageView
+<!--    <androidx.appcompat.widget.AppCompatImageView-->
+<!--        android:id="@+id/imageSignOut"-->
+<!--        android:layout_width="@dimen/_30sdp"-->
+<!--        android:layout_height="@dimen/_30sdp"-->
+<!--        android:layout_marginTop="@dimen/_12sdp"-->
+<!--        android:layout_marginEnd="@dimen/_16sdp"-->
+<!--        android:layout_marginRight="@dimen/_16sdp"-->
+<!--        android:background="@drawable/background_icon"-->
+<!--        android:padding="@dimen/_6sdp"-->
+<!--        android:src="@drawable/round_power_settings_new_24"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintTop_toTopOf="parent"-->
+<!--        app:tint="@color/white"/>-->
+
+    <TextView
         android:id="@+id/imageSignOut"
-        android:layout_width="@dimen/_30sdp"
+        android:layout_width="wrap_content"
         android:layout_height="@dimen/_30sdp"
         android:layout_marginTop="@dimen/_12sdp"
         android:layout_marginEnd="@dimen/_16sdp"
@@ -34,6 +48,10 @@
         android:src="@drawable/round_power_settings_new_24"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        android:text="@string/sign_out"
+        android:textSize="@dimen/_13ssp"
+        android:textColor="@color/white"
+        android:drawableLeft="@drawable/round_logout_24"
         app:tint="@color/white"/>
     
     <TextView
@@ -114,7 +132,7 @@
         android:layout_marginRight="@dimen/_24sdp"
         android:layout_marginBottom="@dimen/_24sdp"
         android:contentDescription="@string/app_name"
-        android:src="@drawable/round_add_24"
+        android:src="@drawable/round_email_24"
         android:backgroundTint="@color/primary"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
