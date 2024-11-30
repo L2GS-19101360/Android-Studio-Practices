@@ -45,7 +45,6 @@
         android:layout_marginRight="@dimen/_16sdp"
         android:background="@drawable/background_icon"
         android:padding="@dimen/_6sdp"
-        android:src="@drawable/round_power_settings_new_24"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         android:text="@string/sign_out"
@@ -53,7 +52,7 @@
         android:textColor="@color/white"
         android:drawableLeft="@drawable/round_logout_24"
         app:tint="@color/white"/>
-    
+
     <TextView
         android:id="@+id/textName"
         android:layout_width="0dp"
@@ -123,7 +122,7 @@
             android:layout_gravity="center"/>
 
     </FrameLayout>
-    
+
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fabNewChat"
         android:layout_width="wrap_content"
