@@ -6,6 +6,6 @@ public class ChatMessage {
 
     public String senderId, receiverId, message, dateTime;
     public Date dateObject;
-    public String conversionId, conversionName, conversionImage;
+    public String conversionId, conversionName, conversionImage, conversionEmail;
 
 }
