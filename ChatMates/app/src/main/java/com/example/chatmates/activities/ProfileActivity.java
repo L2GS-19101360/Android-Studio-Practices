@@ -6,14 +6,18 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.text.InputType;
 import android.util.Base64;
+import android.view.MotionEvent;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.chatmates.R;
 import com.example.chatmates.databinding.ActivityProfileBinding;
 import com.example.chatmates.utilities.Constants;
 import com.example.chatmates.utilities.PreferenceManager;
@@ -52,6 +56,47 @@ public class ProfileActivity extends AppCompatActivity {
             intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
             pickImage.launch(intent);
         });
+
+        binding.inputPassword.setOnTouchListener((v, event) -> {
+            if (event.getAction() == MotionEvent.ACTION_UP) {
+                int drawableEndIndex = 2; // index for drawableEnd
+                if (binding.inputPassword.getCompoundDrawables()[drawableEndIndex] != null) {
+                    float drawableWidth = binding.inputPassword.getCompoundDrawables()[drawableEndIndex].getBounds().width();
+                    if (event.getRawX() >= (binding.inputPassword.getRight() - drawableWidth - binding.inputPassword.getPaddingEnd())) {
+                        togglePasswordVisibility(binding.inputPassword);
+                        return true;
+                    }
+                }
+            }
+            return false;
+        });
+
+        binding.inputConfirmPassword.setOnTouchListener((v, event) -> {
+            if (event.getAction() == MotionEvent.ACTION_UP) {
+                int drawableEndIndex = 2; // index for drawableEnd
+                if (binding.inputConfirmPassword.getCompoundDrawables()[drawableEndIndex] != null) {
+                    float drawableWidth = binding.inputConfirmPassword.getCompoundDrawables()[drawableEndIndex].getBounds().width();
+                    if (event.getRawX() >= (binding.inputConfirmPassword.getRight() - drawableWidth - binding.inputConfirmPassword.getPaddingEnd())) {
+                        togglePasswordVisibility(binding.inputConfirmPassword);
+                        return true;
+                    }
+                }
+            }
+            return false;
+        });
+    }
+
+    private void togglePasswordVisibility(EditText editText) {
+        if (editText.getInputType() == (InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD)) {
+            editText.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+            editText.setCompoundDrawablesWithIntrinsicBounds(null, null,
+                    getDrawable(R.drawable.round_visibility_off_24), null);
+        } else {
+            editText.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+            editText.setCompoundDrawablesWithIntrinsicBounds(null, null,
+                    getDrawable(R.drawable.round_visibility_24), null);
+        }
+        editText.setSelection(editText.getText().length()); // Maintain cursor position
     }
 
     private void updateProfile() {
