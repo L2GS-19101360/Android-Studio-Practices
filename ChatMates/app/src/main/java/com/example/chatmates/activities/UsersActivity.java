@@ -38,6 +38,7 @@ public class UsersActivity extends BaseActivity implements UserListener {
         setContentView(binding.getRoot());
         preferenceManager = new PreferenceManager(getApplicationContext());
         setListeners();
+        setupSwipeToRefresh();
         getUsers();
         setupSearchListener(); // Add this line to initialize the search functionality
     }
@@ -47,6 +48,12 @@ public class UsersActivity extends BaseActivity implements UserListener {
 
     private void setListeners() {
         binding.imageBack.setOnClickListener(v -> onBackPressed());
+    }
+
+    private void setupSwipeToRefresh() {
+        binding.main.setOnRefreshListener(() -> {
+            getUsers();  // Reload the users list when pulled to refresh
+        });
     }
 
     private void getUsers() {
@@ -81,6 +88,9 @@ public class UsersActivity extends BaseActivity implements UserListener {
                     } else {
                         showErrorMessage();
                     }
+
+                    // Stop the refreshing animation once data is fetched
+                    binding.main.setRefreshing(false);
                 });
     }
 

@@ -13,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.chatmates.R;
 import com.example.chatmates.adapters.ChatAdapter;
@@ -58,6 +59,25 @@ public class ChatActivity extends BaseActivity {
         loadReceivedDetail();
         init();
         listenMessages();
+        binding.main.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                // Refresh the activity
+                reloadActivity();
+            }
+        });
+    }
+
+    private void reloadActivity() {
+        // Clear previous messages and refresh the chat
+        chatMessages.clear();
+        chatAdapter.notifyDataSetChanged();
+
+        // Re-initialize data or reload it as needed (e.g., listen for new messages)
+        listenMessages();
+
+        // Stop the refreshing animation
+        binding.main.setRefreshing(false);
     }
 
     private void init() {

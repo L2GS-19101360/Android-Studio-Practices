@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.chatmates.R;
 import com.example.chatmates.adapters.RecentConversationAdapter;
@@ -43,6 +44,7 @@ public class MainActivity extends BaseActivity implements ConversionListener {
     private List<ChatMessage> filteredConversations; // New list for filtered conversations
     private RecentConversationAdapter conversationAdapter;
     private FirebaseFirestore database;
+    private SwipeRefreshLayout swipeRefreshLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +58,28 @@ public class MainActivity extends BaseActivity implements ConversionListener {
         setListeners();
         listenConversations();
         setupSearchUser(); // New method for filtering conversations
+
+        binding.main.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                // Code to refresh the content (e.g., fetch new data)
+                reloadConversations();
+            }
+        });
+    }
+
+    private void reloadConversations() {
+        // Clear the current conversations to avoid duplicates
+        conversations.clear();
+
+        // Reload the conversations (fetch new data, etc.)
+        listenConversations();  // This will repopulate the conversations list
+
+        // Notify the adapter of the dataset change
+        conversationAdapter.notifyDataSetChanged();
+
+        // Stop the refresh animation when the data is reloaded
+        binding.main.setRefreshing(false);
     }
 
     private void init() {
