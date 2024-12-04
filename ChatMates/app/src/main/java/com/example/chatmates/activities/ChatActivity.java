@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Base64;
 import android.view.View;
 
@@ -66,6 +68,27 @@ public class ChatActivity extends BaseActivity {
                 reloadActivity();
             }
         });
+        binding.inputMessage.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                boolean isInputEmpty = charSequence.toString().trim().isEmpty();
+                binding.layoutSend.setEnabled(!isInputEmpty);
+                binding.layoutSend.setAlpha(isInputEmpty ? 0.5f : 1.0f); // Optional: Dim button when disabled
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+
+        binding.layoutSend.setEnabled(false);
+        binding.layoutSend.setAlpha(0.5f);
     }
 
     private void reloadActivity() {
