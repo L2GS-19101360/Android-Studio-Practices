@@ -117,7 +117,7 @@ public class MainActivity extends BaseActivity implements ConversionListener {
     private void deleteMessage(ChatMessage chatMessage) {
         // Remove conversation from Firestore
         database.collection(Constants.KEY_COLLECTION_CONVERSATIONS)
-                .document(chatMessage.conversionId)
+                .document(chatMessage.conversationId)
                 .delete()
                 .addOnSuccessListener(unused -> {
                     conversations.remove(chatMessage);
@@ -188,11 +188,13 @@ public class MainActivity extends BaseActivity implements ConversionListener {
         if (value != null) {
             for (DocumentChange documentChange : value.getDocumentChanges()) {
                 if (documentChange.getType() == DocumentChange.Type.ADDED) {
+                    String documentId = documentChange.getDocument().getId();
                     String senderId = documentChange.getDocument().getString(Constants.KEY_SENDER_ID);
                     String receiverId = documentChange.getDocument().getString(Constants.KEY_RECEIVER_ID);
                     ChatMessage chatMessage = new ChatMessage();
                     chatMessage.senderId = senderId;
                     chatMessage.receiverId = receiverId;
+                    chatMessage.conversationId = documentId;
                     if (preferenceManager.getString(Constants.KEY_USER_ID).equals(senderId)) {
                         chatMessage.conversionImage = documentChange.getDocument().getString(Constants.KEY_RECEIVER_IMAGE);
                         chatMessage.conversionName = documentChange.getDocument().getString(Constants.KEY_RECEIVER_NAME);
