@@ -9,12 +9,16 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Base64;
 import android.view.View;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.recyclerview.widget.ItemTouchHelper;
+import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.chatmates.R;
@@ -114,7 +118,37 @@ public class ChatActivity extends BaseActivity {
         );
         binding.chatRecyclerView.setAdapter(chatAdapter);
         database = FirebaseFirestore.getInstance();
+        setupSwipeToLeft();
     }
+
+    private void setupSwipeToLeft() {
+        ItemTouchHelper.SimpleCallback simpleCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
+            @Override
+            public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+                return false; // We don't support moving items
+            }
+
+            @Override
+            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+                if (direction == ItemTouchHelper.LEFT) {
+                    int position = viewHolder.getAdapterPosition();
+                    ChatMessage swipedMessage = chatMessages.get(position);
+                    String messageContent = swipedMessage.message;
+
+                    // Display the swiped message content in a Toast
+                    Toast.makeText(ChatActivity.this, "Swiped Message: " + messageContent, Toast.LENGTH_SHORT).show();
+
+                    // Reset the swipe animation
+                    chatAdapter.notifyItemChanged(position);
+                }
+            }
+        };
+
+        // Attach the ItemTouchHelper to the RecyclerView
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleCallback);
+        itemTouchHelper.attachToRecyclerView(binding.chatRecyclerView);
+    }
+
 
     private void showDeleteConfirmationDialog(ChatMessage chatMessage) {
         new AlertDialog.Builder(this)
