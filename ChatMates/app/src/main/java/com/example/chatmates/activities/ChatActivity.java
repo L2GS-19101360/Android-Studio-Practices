@@ -290,6 +290,27 @@ public class ChatActivity extends BaseActivity {
                     chatMessage.dateObject = documentChange.getDocument().getDate(Constants.KEY_TIMESTAMP);
                     chatMessage.sentMessageDocumentId = documentChange.getDocument().getId();
                     chatMessages.add(chatMessage);
+                } else if (documentChange.getType() == DocumentChange.Type.MODIFIED) {
+                    String modifiedMessageId = documentChange.getDocument().getId();
+                    String modifiedMessageContent = documentChange.getDocument().getString(Constants.KEY_MESSAGE);
+
+                    for (ChatMessage message : chatMessages) {
+                        if (message.sentMessageDocumentId.equals(modifiedMessageId)) {
+                            message.message = modifiedMessageContent; // Update the message content
+                            chatAdapter.notifyDataSetChanged(); // Refresh the adapter
+                            break;
+                        }
+                    }
+                } else if (documentChange.getType() == DocumentChange.Type.REMOVED) {
+                    String removedMessageId = documentChange.getDocument().getId();
+
+                    for (int i = 0; i < chatMessages.size(); i++) {
+                        if (chatMessages.get(i).sentMessageDocumentId.equals(removedMessageId)) {
+                            chatMessages.remove(i); // Remove the message from the list
+                            chatAdapter.notifyItemRemoved(i); // Notify the adapter about the removed item
+                            break;
+                        }
+                    }
                 }
             }
             Collections.sort(chatMessages, (obj1, obj2) -> obj1.dateObject.compareTo(obj2.dateObject));
