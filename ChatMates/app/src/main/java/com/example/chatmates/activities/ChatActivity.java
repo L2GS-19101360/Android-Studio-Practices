@@ -135,8 +135,7 @@ public class ChatActivity extends BaseActivity {
                     ChatMessage swipedMessage = chatMessages.get(position);
                     String messageContent = swipedMessage.message;
 
-                    // Display the swiped message content in a Toast
-                    Toast.makeText(ChatActivity.this, "Swiped Message: " + messageContent, Toast.LENGTH_SHORT).show();
+                    binding.inputMessage.setText(messageContent);
 
                     // Reset the swipe animation
                     chatAdapter.notifyItemChanged(position);
