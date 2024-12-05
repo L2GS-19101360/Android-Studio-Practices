@@ -177,6 +177,7 @@ public class ChatActivity extends BaseActivity {
                                 }
                             }
                             chatAdapter.notifyDataSetChanged(); // Notify adapter to refresh the chat view
+                            updateConversion(updatedMessage);
                             binding.inputMessage.setText(""); // Clear the input field
                             isSentMessageSwipedId = null; // Reset the swiped message ID
                         } else {
