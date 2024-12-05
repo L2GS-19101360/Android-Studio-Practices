@@ -55,6 +55,7 @@ public class ChatActivity extends BaseActivity {
     private FirebaseFirestore database;
     private String conversionId = null;
     private Boolean isReceiverAvailable = false;
+    private String isSentMessageSwipedId = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -133,8 +134,12 @@ public class ChatActivity extends BaseActivity {
                 if (direction == ItemTouchHelper.LEFT) {
                     int position = viewHolder.getAdapterPosition();
                     ChatMessage swipedMessage = chatMessages.get(position);
+                    String documentId = swipedMessage.sentMessageDocumentId;
                     String messageContent = swipedMessage.message;
 
+                    isSentMessageSwipedId = documentId;
+
+//                    Toast.makeText(getApplicationContext(), documentId, Toast.LENGTH_SHORT).show();
                     binding.inputMessage.setText(messageContent);
 
                     // Reset the swipe animation
@@ -148,6 +153,39 @@ public class ChatActivity extends BaseActivity {
         itemTouchHelper.attachToRecyclerView(binding.chatRecyclerView);
     }
 
+    private void updateSentMessage() {
+        if (isSentMessageSwipedId != null) {
+            // Get the updated message from the input field
+            String updatedMessage = binding.inputMessage.getText().toString();
+
+            // Create a map for the updated message
+            HashMap<String, Object> updatedMessageMap = new HashMap<>();
+            updatedMessageMap.put(Constants.KEY_MESSAGE, updatedMessage);
+            updatedMessageMap.put(Constants.KEY_TIMESTAMP, new Date()); // Update timestamp if needed
+
+            // Update the message in Firestore
+            database.collection(Constants.KEY_COLLECTION_CHAT)
+                    .document(isSentMessageSwipedId)
+                    .update(updatedMessageMap)
+                    .addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            // If successful, update the message locally in the chat
+                            for (ChatMessage message : chatMessages) {
+                                if (message.sentMessageDocumentId.equals(isSentMessageSwipedId)) {
+                                    message.message = updatedMessage;
+                                    break;
+                                }
+                            }
+                            chatAdapter.notifyDataSetChanged(); // Notify adapter to refresh the chat view
+                            binding.inputMessage.setText(""); // Clear the input field
+                            isSentMessageSwipedId = null; // Reset the swiped message ID
+                        } else {
+                            // Handle failure
+                            Toast.makeText(ChatActivity.this, "Failed to update message", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+        }
+    }
 
     private void showDeleteConfirmationDialog(ChatMessage chatMessage) {
         new AlertDialog.Builder(this)
@@ -250,6 +288,7 @@ public class ChatActivity extends BaseActivity {
                     chatMessage.message = documentChange.getDocument().getString(Constants.KEY_MESSAGE);
                     chatMessage.dateTime = getReadableDateTime(documentChange.getDocument().getDate(Constants.KEY_TIMESTAMP));
                     chatMessage.dateObject = documentChange.getDocument().getDate(Constants.KEY_TIMESTAMP);
+                    chatMessage.sentMessageDocumentId = documentChange.getDocument().getId();
                     chatMessages.add(chatMessage);
                 }
             }
@@ -280,7 +319,13 @@ public class ChatActivity extends BaseActivity {
 
     private void setListeners() {
         binding.imageBack.setOnClickListener(v -> onBackPressed());
-        binding.layoutSend.setOnClickListener(v -> sendMessage());
+        binding.layoutSend.setOnClickListener(v -> {
+            if (isSentMessageSwipedId == null) {
+                sendMessage(); // If no message is swiped, send a new message
+            } else {
+                updateSentMessage(); // If a message is swiped, update the sent message
+            }
+        });
         binding.imageInfo.setOnClickListener(v -> {
             receiverUser = (User) getIntent().getSerializableExtra(Constants.KEY_USER);
             Intent intent = new Intent(getApplicationContext(), RecipientActivity.class);
