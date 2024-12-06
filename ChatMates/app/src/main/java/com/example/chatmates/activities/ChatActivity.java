@@ -209,6 +209,7 @@ public class ChatActivity extends BaseActivity {
                             snapshot.getReference().delete();
                         }
                         chatMessages.remove(chatMessage);
+                        updateConversion(preferenceManager.getString(Constants.KEY_NAME) + " deleted a message");
                         chatAdapter.notifyDataSetChanged();
                     }
                 });
