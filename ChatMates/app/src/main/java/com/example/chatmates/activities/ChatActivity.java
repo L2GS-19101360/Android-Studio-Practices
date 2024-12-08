@@ -338,6 +338,9 @@ public class ChatActivity extends BaseActivity {
     private void loadReceivedDetail() {
         receiverUser = (User) getIntent().getSerializableExtra(Constants.KEY_USER);
         binding.textName.setText(receiverUser.name);
+        byte[] bytes = Base64.decode(receiverUser.image, Base64.DEFAULT);
+        Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+        binding.imageUser.setImageBitmap(bitmap);
     }
 
     private void setListeners() {
